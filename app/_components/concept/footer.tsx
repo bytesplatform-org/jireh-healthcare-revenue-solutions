@@ -6,6 +6,8 @@ import { SITE } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { scrollToTarget } from "../motion/smooth-scroll";
 import { GRAD } from "./bits";
+import { ShaderCanvas } from "./gl/shader-canvas";
+import { SILK } from "./gl/shaders";
 import swam from "@/public/brand/swam-certified.webp";
 import cbcs from "@/public/brand/cbcs-badge.png";
 
@@ -43,7 +45,9 @@ export function ConceptFooter() {
   );
 
   return (
-    <footer ref={ref} className={`relative overflow-hidden rounded-t-[40px] px-5 pt-16 text-white shadow-[0_-40px_80px_-40px_rgb(40_30_120/0.35)] sm:px-8 md:pt-20 lg:px-10 ${GRAD.dusk}`}>
+    <footer ref={ref} className={`relative isolate overflow-hidden rounded-t-[40px] px-5 pt-16 text-white shadow-[0_-40px_80px_-40px_rgb(40_30_120/0.35)] sm:px-8 md:pt-20 lg:px-10 ${GRAD.dusk}`}>
+      {/* the dusk panel as flowing silk (shader), over its CSS gradient */}
+      <ShaderCanvas frag={SILK} resolution={0.5} className="absolute inset-0 -z-10 size-full" />
       <div className="mx-auto grid max-w-[1440px] gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
         <div>
           <p className="max-w-[26ch] text-[clamp(1.4rem,2vw,1.75rem)] leading-tight font-medium tracking-[-0.02em]">{SITE.promise}</p>

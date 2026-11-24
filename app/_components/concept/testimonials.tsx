@@ -5,6 +5,8 @@ import { TESTIMONIALS } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { Star, cx } from "../ui/primitives";
 import { GRAD } from "./bits";
+import { ShaderCanvas } from "./gl/shader-canvas";
+import { CAUSTICS } from "./gl/shaders";
 
 const REVIEWS = [
   { quote: TESTIMONIALS.featured.quote, name: TESTIMONIALS.featured.name, role: TESTIMONIALS.featured.role, tone: `${GRAD.violet} text-white`, size: "text-[clamp(1.1rem,1.6vw,1.45rem)]" },
@@ -95,7 +97,10 @@ export function ConceptTestimonials() {
         {/* Pale aqua stage: three colour layers rise from the bottom like liquid filling a glass */}
         <div aria-hidden className="absolute inset-3 overflow-hidden rounded-[30px]">
           {RISE_LAYERS.map((bg, i) => (
-            <div key={i} data-rise className="absolute inset-0" style={{ background: bg }} />
+            <div key={i} data-rise className="absolute inset-0" style={{ background: bg }}>
+              {/* the last (aqua) layer is water: pool-light caustics, rippled by the pointer */}
+              {i === RISE_LAYERS.length - 1 && <ShaderCanvas frag={CAUSTICS} resolution={0.75} className="absolute inset-0 size-full" />}
+            </div>
           ))}
         </div>
         <div className="relative mx-auto flex max-w-[1440px] items-start justify-between gap-6 lg:absolute lg:inset-x-0 lg:top-24 lg:px-10">

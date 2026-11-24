@@ -6,6 +6,8 @@ import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { Icon, cx } from "../ui/primitives";
 import { Chip, GRAD, type Grad } from "./bits";
 import { Glass, type GlassKind } from "./glass";
+import { ShaderCanvas } from "./gl/shader-canvas";
+import { CURTAIN } from "./gl/shaders";
 
 const TONES: Grad[] = ["violet", "sky", "lilac", "aqua", "violet", "sky"];
 /** The dark stage is built from this many stripe columns, alternating these shades. */
@@ -38,12 +40,10 @@ export function ConceptRail() {
           defaults: { ease: "none" },
           scrollTrigger: { trigger: root, start: "top 95%", end: "top top", scrub: 0.6 },
         });
-        tl.fromTo(root.querySelectorAll("[data-curtain]"), { scaleY: 0 }, { scaleY: 1, duration: 0.7, ease: "power2.out", stagger: { each: 0.03, from: "random" } }, 0).fromTo(
-          root.querySelectorAll("[data-ink]"),
-          { color: "#1a1530" },
-          { color: "#ffffff", duration: 0.35 },
-          0.65,
-        );
+        tl.fromTo(root.querySelectorAll("[data-curtain]"), { scaleY: 0 }, { scaleY: 1, duration: 0.7, ease: "power2.out", stagger: { each: 0.03, from: "random" } }, 0)
+          .fromTo(root.querySelectorAll("[data-ink]"), { color: "#1a1530" }, { color: "#ffffff", duration: 0.35 }, 0.65)
+          // once the columns are up, the live (shader) fabric takes over from them
+          .fromTo(root.querySelectorAll("[data-curtain-gl]"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 0.7);
       });
     },
     { scope: ref },
@@ -102,6 +102,10 @@ export function ConceptRail() {
           {Array.from({ length: CURTAIN_BARS }).map((_, i) => (
             <span key={i} data-curtain className="h-full flex-1 origin-bottom" style={{ background: CURTAIN_SHADES[i % CURTAIN_SHADES.length] }} />
           ))}
+        </div>
+        {/* …and the same columns as lit fabric (shader): the pointer brushes them, scrolling ripples them */}
+        <div aria-hidden data-curtain-gl className="absolute inset-3 overflow-hidden rounded-[30px]">
+          <ShaderCanvas frag={CURTAIN} resolution={0.6} className="size-full" />
         </div>
         <div className="relative mx-auto flex w-full max-w-[1440px] flex-wrap items-end justify-between gap-6 px-5 sm:px-8 lg:px-10">
           <div>

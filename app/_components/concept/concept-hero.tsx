@@ -8,6 +8,8 @@ import { onIntro } from "../motion/intro";
 import { cx } from "../ui/primitives";
 import { Arrow, ArrowButton, Chip } from "./bits";
 import { Glass } from "./glass";
+import { ShaderCanvas } from "./gl/shader-canvas";
+import { BLOB, PILL } from "./gl/shaders";
 import ceo from "@/public/images/ceo-tammy.webp";
 import swam from "@/public/brand/swam-certified.webp";
 import cbcs from "@/public/brand/cbcs-badge.png";
@@ -119,7 +121,10 @@ export function ConceptHero() {
           <div className="flex flex-col">
             <h1 className="text-[clamp(2.5rem,4.9vw,4.9rem)] leading-[1.04] font-medium tracking-[-0.035em] 2xl:text-[5.1rem] lg:[&_[data-line]]:whitespace-nowrap">
               <Line>
-                <span aria-hidden className="mb-[0.04em] mr-[0.22em] inline-block h-[0.72em] w-[1.55em] translate-y-[0.06em] rounded-full bg-[repeating-linear-gradient(90deg,#9fe3ec_0_0.09em,#c9b8f5_0.09em_0.2em,#e7d6fb_0.2em_0.28em)]" />
+                <span aria-hidden className="relative mb-[0.04em] mr-[0.22em] inline-block h-[0.72em] w-[1.55em] translate-y-[0.06em] overflow-hidden rounded-full bg-[repeating-linear-gradient(90deg,#9fe3ec_0_0.09em,#c9b8f5_0.09em_0.2em,#e7d6fb_0.2em_0.28em)] data-[gl=on]:bg-none">
+                  {/* liquid stripes (shader) */}
+                  <ShaderCanvas frag={PILL} maxDpr={2} className="absolute inset-0 size-full" />
+                </span>
                 Billing experts
               </Line>
               <Line>that protect</Line>
@@ -175,6 +180,8 @@ export function ConceptHero() {
             {/* Big card */}
             <Card href="#contact" className="col-span-2 min-h-[280px] bg-[linear-gradient(135deg,#6f63e6_0%,#8b80f2_55%,#b3a8f8_100%)] sm:min-h-[320px] lg:min-h-0">
               <GlassBlob />
+              {/* the blob as real liquid glass (shader); the CSS one above is the fallback */}
+              <ShaderCanvas frag={BLOB} className="absolute inset-0 size-full" />
               <div className="relative flex h-full flex-col justify-between p-6 sm:p-7">
                 <p className="max-w-[14ch] text-[clamp(1.6rem,2.5vw,2.3rem)] leading-[1.08] font-normal tracking-[-0.02em] text-white">
                   Ready to take billing off your plate? Let&apos;s talk.
@@ -280,7 +287,7 @@ function Dot({ className }: { className?: string }) {
 /** Big card: a liquid-glass blob with a few droplets. */
 function GlassBlob() {
   return (
-    <div aria-hidden className="pointer-events-none absolute -top-[14%] right-[-10%] h-[118%] w-[52%] max-sm:w-[58%]">
+    <div aria-hidden className="pointer-events-none absolute -top-[14%] right-[-10%] h-[118%] w-[52%] max-sm:w-[58%] [[data-gl=on]_&]:hidden">
       <div data-lean="26" className="absolute inset-0">
         <div
           data-float
