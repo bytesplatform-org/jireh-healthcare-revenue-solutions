@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef, useState } from "react";
-import { SITE } from "@/lib/content";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { NAV_LINKS, ROUTES, SITE } from "@/lib/content";
 import { gsap, ScrollTrigger, useGSAP, MQ } from "../motion/gsap";
 import { onIntro } from "../motion/intro";
 import { cx } from "../ui/primitives";
-import { CONCEPT_LINKS } from "./footer";
+import { TransitionLink as Link } from "../ui/transition-link";
 import mark from "@/public/brand/jireh-mark-clear.png";
 import wordmark from "@/public/brand/jireh-wordmark-clear.png";
 
@@ -14,7 +15,10 @@ import wordmark from "@/public/brand/jireh-wordmark-clear.png";
 const THRESHOLD = 80;
 /** Widest the pill gets. */
 const PILL_MAX = 1080;
-const LINKS = CONCEPT_LINKS.slice(0, 3);
+/** The site's pages (as on the current live site). */
+const LINKS = [...NAV_LINKS, { label: "Book a Free Consultation", href: ROUTES.book }] as const;
+/** This concept is the future home page, so it lights "Home". */
+const HOME_ALIASES = new Set(["/", "/hero-concept"]);
 
 /**
  * Concept page header, fixed to the top.
@@ -25,15 +29,33 @@ const LINKS = CONCEPT_LINKS.slice(0, 3);
  * up, the logo mark spins once and the links flip in like a slot machine.
  * Scrolling back to the top morphs it back.
  *
- * While pinned: a gradient capsule slides behind the link of the section in
- * view, and fast scrolling makes the pill lean into the motion.
+ * The links go to the site's pages. The current page is underlined on the flat
+ * bar and gets a gradient capsule in the pill; fast scrolling makes the pill
+ * lean into the motion. Below lg the links move into a dropdown menu.
  */
 export function ConceptHeader() {
   const ref = useRef<HTMLElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const indRef = useRef<HTMLSpanElement>(null);
-  const [active, setActive] = useState(-1);
   const [compact, setCompact] = useState(false);
+  const [open, setOpen] = useState(false);
+  const menuId = useId();
+  const pathname = usePathname();
+  const active = LINKS.findIndex((l) => (l.href === ROUTES.home ? HOME_ALIASES.has(pathname) : pathname === l.href));
+
+  // the menu closes on Escape and when the viewport grows past it
+  useEffect(() => {
+    if (!open) return;
+    const key = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const wide = window.matchMedia("(min-width: 1024px)");
+    const grow = () => wide.matches && setOpen(false);
+    window.addEventListener("keydown", key);
+    wide.addEventListener("change", grow);
+    return () => {
+      window.removeEventListener("keydown", key);
+      wide.removeEventListener("change", grow);
+    };
+  }, [open]);
 
   // Gradient capsule follows the active section's link.
   useLayoutEffect(() => {
@@ -41,7 +63,7 @@ export function ConceptHeader() {
     const ind = indRef.current;
     if (!list || !ind) return;
     const place = () => {
-      const a = list.querySelectorAll<HTMLElement>("a")[active];
+      const a = active < 0 ? undefined : list.querySelectorAll<HTMLElement>("a")[active];
       if (!a || !compact) {
         ind.style.opacity = "0";
         return;
@@ -129,22 +151,6 @@ export function ConceptHeader() {
         });
         if (window.scrollY > THRESHOLD) toPill();
 
-        // which section is in view (positions settle once every pin exists)
-        const spies = LINKS.map((l, i) => {
-          const target = document.querySelector(l.href);
-          return target
-            ? ScrollTrigger.create({
-                trigger: target,
-                start: "top 55%",
-                end: "bottom 55%",
-                // measured after the pinned sections (created later) have added their scroll length
-                refreshPriority: -1,
-                // light this link while its section is in view; clear it on leaving (e.g. into Contact)
-                onToggle: (self) => setActive((cur) => (self.isActive ? i : cur === i ? -1 : cur)),
-              })
-            : null;
-        });
-
         // entrance with the loader
         const off = onIntro((tl) => {
           tl.fromTo(shell, { y: -24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1, ease: "expo.out" }, 0.55);
@@ -154,7 +160,6 @@ export function ConceptHeader() {
           off();
           st.kill();
           page.kill();
-          spies.forEach((s) => s?.kill());
           upright.kill();
         };
       });
@@ -184,7 +189,7 @@ export function ConceptHeader() {
             <Image src={wordmark} alt="Jireh Healthcare Revenue Solutions" className="h-6 w-auto max-[360px]:hidden" priority sizes="80px" />
           </a>
 
-          <ul ref={listRef} className="relative hidden items-center gap-9 text-[15px] font-medium lg:flex">
+          <ul ref={listRef} className="relative hidden items-center gap-7 text-[14px] font-medium lg:flex xl:gap-9 xl:text-[15px]">
             <span
               ref={indRef}
               aria-hidden
@@ -192,27 +197,74 @@ export function ConceptHeader() {
             />
             {LINKS.map((l, i) => (
               <li key={l.href} className="relative">
-                <a
+                <Link
                   data-link
                   href={l.href}
-                  aria-current={compact && active === i ? "true" : undefined}
-                  className={cx("inline-block transition-colors duration-300", compact && active === i ? "text-white" : "hover:opacity-60")}
+                  aria-current={active === i ? "page" : undefined}
+                  className={cx("group/l relative inline-block whitespace-nowrap transition-colors duration-300", compact && active === i && "text-white")}
                 >
                   {l.label}
-                </a>
+                  {/* underline: the current page on the flat bar, and on hover */}
+                  <span
+                    aria-hidden
+                    className={cx(
+                      "absolute inset-x-0 -bottom-1.5 h-[1.5px] origin-left rounded-full bg-current transition-[scale] duration-500 ease-out-expo",
+                      !compact && active === i ? "scale-x-100" : "scale-x-0 group-hover/l:scale-x-100",
+                      compact && active === i && "hidden",
+                    )}
+                  />
+                </Link>
               </li>
             ))}
           </ul>
 
-          <div className="flex shrink-0 items-center gap-5">
-            <a href={SITE.phoneHref} className="hidden text-[15px] font-medium transition-opacity hover:opacity-60 sm:block">
+          <div className="flex shrink-0 items-center gap-2">
+            <a href={SITE.phoneHref} className="rounded-full bg-[#c7ecf1] px-5 py-2.5 text-[15px] font-medium whitespace-nowrap text-[#0a6f7b] transition-colors hover:bg-[#ade3ea]">
               Call us
             </a>
-            <a href="#contact" className="rounded-full bg-[#c7ecf1] px-5 py-2.5 text-[15px] font-medium text-[#0a6f7b] transition-colors hover:bg-[#ade3ea]">
-              Book a call
-            </a>
+            <button
+              type="button"
+              aria-expanded={open}
+              aria-controls={menuId}
+              aria-label={open ? "Close menu" : "Open menu"}
+              onClick={() => setOpen((o) => !o)}
+              className="grid size-10 place-items-center rounded-full bg-[#1a1530] text-white lg:hidden"
+            >
+              <span aria-hidden className="relative block h-3 w-4">
+                <span className={cx("absolute left-0 block h-[1.5px] w-4 bg-current transition-transform duration-300", open ? "top-1/2 rotate-45" : "top-0")} />
+                <span className={cx("absolute left-0 block h-[1.5px] w-4 bg-current transition-transform duration-300", open ? "top-1/2 -rotate-45" : "bottom-0")} />
+              </span>
+            </button>
           </div>
         </nav>
+
+        {/* Below lg: the pages in a glass dropdown */}
+        <div
+          id={menuId}
+          hidden={!open}
+          className="absolute inset-x-0 top-full mt-2 overflow-hidden rounded-[28px] bg-white/85 p-3 shadow-[0_24px_60px_-20px_rgb(60_50_140/0.45)] ring-1 ring-white/70 backdrop-blur-2xl lg:hidden"
+        >
+          <ul className="grid">
+            {LINKS.map((l, i) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={active === i ? "page" : undefined}
+                  className={cx(
+                    "flex items-center justify-between rounded-[20px] px-4 py-3.5 text-[19px] font-medium tracking-[-0.01em] transition-colors",
+                    active === i ? "bg-[linear-gradient(135deg,#6f63e6,#8b80f2_55%,#5fa8f5)] text-white" : "hover:bg-[#f1eff8]",
+                  )}
+                >
+                  {l.label}
+                  <span aria-hidden className="text-[15px] opacity-60">
+                    0{i + 1}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </header>
   );
