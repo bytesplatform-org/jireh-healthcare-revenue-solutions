@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { CYCLE } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { Icon, cx } from "../ui/primitives";
-import { Chip, GRAD, Orb, Tag, type Grad } from "./bits";
+import { Chip, GRAD, Orb, type Grad } from "./bits";
 
 const TONES: Grad[] = ["violet", "sky", "lilac", "aqua", "violet", "sky"];
 /** Pastel cards carry ink text; saturated ones white. */
@@ -68,8 +68,7 @@ export function ConceptRail() {
       <div data-pin className="flex flex-col justify-center overflow-hidden py-20 lg:h-svh lg:py-0">
         <div className="mx-auto flex w-full max-w-[1440px] flex-wrap items-end justify-between gap-6 px-5 sm:px-8 lg:px-10">
           <div>
-            <Tag>how we work</Tag>
-            <h2 id="rail-title" className="mt-5 max-w-[16ch] text-[clamp(2.25rem,4.4vw,4.25rem)] leading-[1.02] font-medium tracking-[-0.035em] text-[#1a1530]">
+            <h2 id="rail-title" className="max-w-[16ch] text-[clamp(2.25rem,4.4vw,4.25rem)] leading-[1.02] font-medium tracking-[-0.035em] text-[#1a1530]">
               Six steps. One partner. Every claim followed through.
             </h2>
           </div>

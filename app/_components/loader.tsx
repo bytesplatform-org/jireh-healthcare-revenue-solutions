@@ -37,8 +37,9 @@ const nextFrame = () =>
  * First load (concept theme): white, the logo mark, the headline's striped
  * pill filling with the charge, a big light counter running to 100 and glass
  * orbs, driven by real progress (webfonts, page load) with a minimum and
- * maximum duration. Then the content lifts off and the screen, built as three
- * columns, rises away column by column, each trailing a rounded gradient tail
+ * maximum duration. Then, with everything still showing, the screen breaks
+ * into its three columns and they rise away one by one, each carrying its slice
+ * of the content and trailing a rounded gradient tail
  * (violet, sky, lilac) across the page, while every entrance registered through
  * `onIntro` (hero, header, buttons) plays on the same timeline.
  *
@@ -63,10 +64,12 @@ export function Loader() {
     if (!root) return;
     const html = document.documentElement;
     const q = gsap.utils.selector(root);
-    const fill = q("[data-fill]")[0] as HTMLElement;
+    // the content is rendered once per column (each shows its third), so these
+    // hold three copies; `render` keeps them in step
+    const fills = q("[data-fill]") as HTMLElement[];
     const digits = q("[data-digit]") as HTMLElement[];
     const cols = q("[data-col]") as HTMLElement[];
-    const content = q("[data-content]")[0] as HTMLElement;
+    const slices = q("[data-slice]") as HTMLElement[];
     /** Height of a column's gradient tail (they hang above/below each column). */
     const tail = () => (q("[data-tail]")[0] as HTMLElement).offsetHeight;
     const reduced = window.matchMedia(MQ.reduce).matches;
@@ -80,8 +83,9 @@ export function Loader() {
     let lastSaved = 0;
     const render = (p: number) => {
       const s = String(Math.round(p * 100)).padStart(3, "0");
-      digits.forEach((d, i) => (d.textContent = s[i]));
-      fill.style.clipPath = `inset(0 ${(100 - p * 100).toFixed(2)}% 0 0 round 999px)`;
+      digits.forEach((d, i) => (d.textContent = s[i % 3]));
+      const clip = `inset(0 ${(100 - p * 100).toFixed(2)}% 0 0 round 999px)`;
+      fills.forEach((f) => (f.style.clipPath = clip));
       if (persist && performance.now() - lastSaved > 80) {
         lastSaved = performance.now();
         try {
@@ -137,7 +141,7 @@ export function Loader() {
     const reveal = (fast = false) =>
       new Promise<void>((resolve) => {
         // page transitions lift sooner and a little quicker than the first load
-        const lift = fast ? 0.25 : 0.45;
+        const lift = fast ? 0.1 : 0.2;
         const dur = fast ? 0.95 : 1.15;
         const tl = gsap.timeline({
           onComplete: () => {
@@ -154,14 +158,12 @@ export function Loader() {
           playIntro(tl);
           return;
         }
-        // the content lifts off, then the three columns rise away one after
-        // another, their gradient tails sweeping up across the page
-        tl.to(q("[data-lockup]"), { yPercent: -30, autoAlpha: 0, duration: 0.6, ease: "power3.in" }, 0.1)
-          .to(digits, { yPercent: -110, duration: 0.5, stagger: 0.05, ease: "power3.in" }, 0.1)
-          .to(q("[data-meta]"), { autoAlpha: 0, duration: 0.3 }, 0.1)
-          .to(q("[data-orb]"), { y: -80, autoAlpha: 0, duration: 0.6, stagger: 0.05, ease: "power3.in" }, 0.1)
-          .set(content, { autoAlpha: 0 }, lift)
-          .fromTo(cols, { y: 0 }, { y: () => -(root.offsetHeight + tail() + 4), duration: dur, stagger: 0.09, ease: "expo.inOut" }, lift)
+        // Everything stays in place: the screen breaks into its three columns and
+        // they rise away one after another, each carrying its slice of the logo,
+        // pill and counter (which drift down inside a little, for depth) and
+        // trailing a gradient tail across the page.
+        tl.fromTo(cols, { y: 0 }, { y: () => -(root.offsetHeight + tail() + 4), duration: dur, stagger: 0.09, ease: "expo.inOut" }, lift)
+          .fromTo(slices, { y: 0 }, { y: () => root.offsetHeight * 0.18, duration: dur, stagger: 0.09, ease: "expo.inOut" }, lift)
           // scrolling comes back as soon as the last column has cleared the screen
           .call(unlock, undefined, lift + dur + 0.18);
         playIntro(tl);
@@ -170,24 +172,20 @@ export function Loader() {
     /** Bring the panel up from the bottom to cover the current page. */
     const cover = () =>
       new Promise<void>((resolve) => {
-        gsap.set(q("[data-lockup]"), { yPercent: 0, autoAlpha: 1 });
-        gsap.set(digits, { yPercent: 0 });
-        gsap.set([q("[data-meta]"), q("[data-orb]")], { autoAlpha: 1, y: 0 });
+        gsap.set(slices, { y: 0 });
         render(0);
         if (reduced) {
           gsap.set(cols, { y: 0 });
-          gsap.set(content, { autoAlpha: 1 });
           gsap.fromTo(root, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, onComplete: resolve });
           return;
         }
         gsap.set(root, { autoAlpha: 1 });
-        gsap.set(content, { autoAlpha: 0 });
         gsap
           .timeline({ onComplete: resolve })
-          // the columns rise in from below, gradient tails leading
+          // the columns rise in from below, gradient tails leading, each bringing
+          // its slice of the logo and pill with it
           .fromTo(cols, { y: () => root.offsetHeight + tail() + 4 }, { y: 0, duration: 0.85, stagger: 0.07, ease: "expo.inOut" })
-          .set(content, { autoAlpha: 1 }, 0.7)
-          .fromTo(q("[data-lockup]"), { yPercent: 30, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.6, ease: "power3.out" }, 0.7);
+          .fromTo(slices, { y: () => -root.offsetHeight * 0.18 }, { y: 0, duration: 0.85, stagger: 0.07, ease: "expo.inOut" }, 0);
       });
 
     /** Page transitions show the lockup charge without the counter. */
@@ -313,49 +311,64 @@ export function Loader() {
       >
         <span className="sr-only">Loading Jireh Healthcare Revenue Solutions</span>
 
-        {/* Three white columns; each carries a rounded gradient tail above and below it */}
+        {/*
+          Three white columns, each with a rounded gradient tail above and below.
+          Each holds a full-screen copy of the content, shifted so the column
+          shows its own third: together they read as one screen, and when they
+          part each carries its piece away.
+        */}
         <div aria-hidden className="absolute inset-0 flex">
           {COLUMN_TAILS.map((g, i) => (
-            <div key={i} data-col className="relative h-full flex-1 bg-white">
+            <div key={i} data-col className="relative h-full flex-1">
               <div data-tail className={`absolute inset-x-0 bottom-full h-[16vh] rounded-t-[48px] ${g}`} />
               <div className={`absolute inset-x-0 top-full h-[16vh] rounded-b-[48px] ${g}`} />
+              <div className="absolute inset-0 overflow-hidden bg-white">
+                <div data-slice className="absolute top-0 h-full w-[300%]" style={{ left: `${-i * 100}%` }}>
+                  <LoaderContent priority={i === 0} />
+                </div>
+              </div>
               {/* hairline seam so the columns read as three panels as they part */}
               {i > 0 && <span className="absolute inset-y-0 left-0 w-px bg-[#1a1530]/[0.04]" />}
             </div>
           ))}
         </div>
-
-        <div data-content aria-hidden className="absolute inset-0 flex flex-col">
-          <Orb data-orb="" tint="violet" className="absolute top-[9%] right-[9%] w-[clamp(80px,11vw,170px)]" />
-          <Orb data-orb="" tint="sky" className="absolute bottom-[22%] left-[7%] w-[clamp(54px,6vw,100px)]" />
-          <Orb data-orb="" tint="lilac" className="absolute top-[30%] left-[22%] w-[clamp(28px,3vw,50px)]" />
-
-          <div className="relative flex flex-1 items-center justify-center px-5">
-            <div data-lockup className="flex flex-col items-center text-center">
-              <Image src={markClear} alt="" priority className="h-14 w-auto sm:h-16" sizes="100px" />
-              {/* the striped pill from the headline, filling with the charge */}
-              <div className="relative mt-8 h-[clamp(44px,7vw,72px)] w-[clamp(220px,34vw,420px)] rounded-full bg-[#f1eff8]">
-                <div data-fill className="absolute inset-0 rounded-full bg-[repeating-linear-gradient(90deg,#9fe3ec_0_10px,#c9b8f5_10px_22px,#e7d6fb_22px_30px)] [clip-path:inset(0_100%_0_0_round_999px)]" />
-              </div>
-              <p className="mt-6 text-[clamp(1.25rem,2vw,1.6rem)] font-medium tracking-[-0.02em]">Jireh Healthcare Revenue Solutions</p>
-            </div>
-          </div>
-
-          <div className="relative flex items-end justify-between gap-6 px-5 pb-6 sm:px-8 md:px-10 md:pb-9">
-            <p data-meta className="text-[14px] font-medium text-[#1a1530]/55">
-              Faith. Integrity. Excellence.
-            </p>
-            <p data-count className="flex overflow-hidden text-[clamp(3.5rem,9vw,8rem)] leading-[0.85] font-light tracking-[-0.05em] tabular-nums">
-              {[0, 1, 2].map((i) => (
-                <span key={i} data-digit className="inline-block">
-                  0
-                </span>
-              ))}
-            </p>
-          </div>
-        </div>
       </div>
     </>
+  );
+}
+
+/** The loader screen (rendered once per column). */
+function LoaderContent({ priority }: { priority: boolean }) {
+  return (
+    <div className="absolute inset-0 flex flex-col">
+      <Orb data-orb="" tint="violet" className="absolute top-[9%] right-[9%] w-[clamp(80px,11vw,170px)]" />
+      <Orb data-orb="" tint="sky" className="absolute bottom-[22%] left-[7%] w-[clamp(54px,6vw,100px)]" />
+      <Orb data-orb="" tint="lilac" className="absolute top-[30%] left-[22%] w-[clamp(28px,3vw,50px)]" />
+
+      <div className="relative flex flex-1 items-center justify-center px-5">
+        <div data-lockup className="flex flex-col items-center text-center">
+          <Image src={markClear} alt="" priority={priority} className="h-14 w-auto sm:h-16" sizes="100px" />
+          {/* the striped pill from the headline, filling with the charge */}
+          <div className="relative mt-8 h-[clamp(44px,7vw,72px)] w-[clamp(220px,34vw,420px)] rounded-full bg-[#f1eff8]">
+            <div data-fill className="absolute inset-0 rounded-full bg-[repeating-linear-gradient(90deg,#9fe3ec_0_10px,#c9b8f5_10px_22px,#e7d6fb_22px_30px)] [clip-path:inset(0_100%_0_0_round_999px)]" />
+          </div>
+          <p className="mt-6 text-[clamp(1.25rem,2vw,1.6rem)] font-medium tracking-[-0.02em]">Jireh Healthcare Revenue Solutions</p>
+        </div>
+      </div>
+
+      <div className="relative flex items-end justify-between gap-6 px-5 pb-6 sm:px-8 md:px-10 md:pb-9">
+        <p data-meta className="text-[14px] font-medium text-[#1a1530]/55">
+          Faith. Integrity. Excellence.
+        </p>
+        <p data-count className="flex overflow-hidden text-[clamp(3.5rem,9vw,8rem)] leading-[0.85] font-light tracking-[-0.05em] tabular-nums">
+          {[0, 1, 2].map((d) => (
+            <span key={d} data-digit className="inline-block">
+              0
+            </span>
+          ))}
+        </p>
+      </div>
+    </div>
   );
 }
 

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { CEO } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
-import { GRAD, Orb, Tag } from "./bits";
+import { GRAD, Orb } from "./bits";
 import portrait from "@/public/images/ceo-tammy.webp";
 
 /**
@@ -54,8 +54,7 @@ export function ConceptCeo() {
 
         <div className="relative">
           <Orb tint="sky" className="absolute -top-16 right-[4%] w-24 max-lg:hidden" />
-          <Tag>meet our ceo</Tag>
-          <h2 id="ceo-title" className="mt-6 text-[clamp(2.2rem,4.2vw,4rem)] leading-[1.05] font-medium tracking-[-0.035em] text-[#1a1530]">
+          <h2 id="ceo-title" className="text-[clamp(2.2rem,4.2vw,4rem)] leading-[1.05] font-medium tracking-[-0.035em] text-[#1a1530]">
             <span className="sr-only">{headline}</span>
             <span aria-hidden>
               {headline.split(" ").map((w, i) => (

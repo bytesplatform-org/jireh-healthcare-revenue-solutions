@@ -6,7 +6,7 @@ import { SITE } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { Magnetic } from "../motion/magnetic";
 import { cx } from "../ui/primitives";
-import { Arrow, GRAD, Orb, Tag } from "./bits";
+import { Arrow, GRAD, Orb } from "./bits";
 
 /**
  * Contact: a violet card (call, email, hours) beside the consultation form.
@@ -35,8 +35,7 @@ export function ConceptContact() {
           <Orb data-drift="" tint="violet" className="absolute -right-[12%] -bottom-[10%] w-[60%]" />
           <Orb data-drift="" tint="sky" className="absolute top-[10%] right-[18%] w-[14%]" />
           <div className="relative">
-            <Tag light>free consultation</Tag>
-            <h2 id="contact-title" className="mt-6 max-w-[13ch] text-[clamp(2.3rem,4.2vw,4rem)] leading-[1.02] font-medium tracking-[-0.035em]">
+            <h2 id="contact-title" className="max-w-[13ch] text-[clamp(2.3rem,4.2vw,4rem)] leading-[1.02] font-medium tracking-[-0.035em]">
               Ready to take billing off your plate?
             </h2>
           </div>

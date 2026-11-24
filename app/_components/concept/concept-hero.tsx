@@ -7,9 +7,6 @@ import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { onIntro } from "../motion/intro";
 import { cx } from "../ui/primitives";
 import { Arrow, ArrowButton, Chip } from "./bits";
-import { CONCEPT_LINKS } from "./footer";
-import mark from "@/public/brand/jireh-mark-clear.png";
-import wordmark from "@/public/brand/jireh-wordmark-clear.png";
 import ceo from "@/public/images/ceo-tammy.webp";
 import swam from "@/public/brand/swam-certified.webp";
 import cbcs from "@/public/brand/cbcs-badge.png";
@@ -35,8 +32,7 @@ export function ConceptHero() {
         const count = q("[data-count]")[0] as HTMLElement | undefined;
 
         const off = onIntro((tl) => {
-          tl.fromTo(q("[data-nav]"), { y: -16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.9, ease: "expo.out" }, 0.6)
-            .fromTo(q("[data-line]"), { yPercent: 110 }, { yPercent: 0, duration: 1.2, stagger: 0.08, ease: "expo.out" }, 0.7)
+          tl.fromTo(q("[data-line]"), { yPercent: 110 }, { yPercent: 0, duration: 1.2, stagger: 0.08, ease: "expo.out" }, 0.7)
             .fromTo(q("[data-rise]"), { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1, stagger: 0.08, ease: "expo.out" }, 1.05)
             .fromTo(q("[data-card]"), { y: 60, scale: 0.94, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, duration: 1.2, stagger: 0.12, ease: "expo.out" }, 0.8);
           if (count) {
@@ -89,39 +85,15 @@ export function ConceptHero() {
   return (
     <div ref={ref} id="top" className="flex min-h-svh flex-col bg-white text-[#1a1530]">
       <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-5 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-7">
-        {/* Nav */}
-        <header data-nav className="flex items-center justify-between gap-6">
-          <a href="#top" aria-label={`${SITE.name}, back to top`} className="flex items-center gap-2">
-            <Image src={mark} alt="" className="h-8 w-auto" priority sizes="56px" />
-            <Image src={wordmark} alt="Jireh Healthcare Revenue Solutions" className="h-6 w-auto" priority sizes="80px" />
-          </a>
-          <nav aria-label="Primary" className="hidden lg:block">
-            <ul className="flex items-center gap-9 text-[15px] font-medium">
-              {CONCEPT_LINKS.slice(0, 3).map((l) => (
-                <li key={l.href}>
-                  <a href={l.href} className="transition-opacity hover:opacity-60">
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div className="flex items-center gap-5">
-            <a href={SITE.phoneHref} className="hidden text-[15px] font-medium transition-opacity hover:opacity-60 sm:block">
-              Call us
-            </a>
-            <a href="#contact" className="rounded-full bg-[#c7ecf1] px-5 py-2.5 text-[15px] font-medium text-[#0a6f7b] transition-colors hover:bg-[#ade3ea]">
-              Book a call
-            </a>
-          </div>
-        </header>
+        {/* room for the fixed ConceptHeader, which sits here at the top of the page */}
+        <div aria-hidden className="h-11 shrink-0" />
 
         <div className="mt-10 grid gap-10 lg:mt-8 lg:min-h-[560px] lg:flex-1 lg:grid-cols-[1fr_1.02fr] lg:gap-12">
           {/* Left */}
           <div className="flex flex-col">
             <h1 className="text-[clamp(2.5rem,4.9vw,4.9rem)] leading-[1.04] font-medium tracking-[-0.035em] 2xl:text-[5.1rem] lg:[&_[data-line]]:whitespace-nowrap">
               <Line>
-                <span aria-hidden className="mr-[0.22em] inline-block h-[0.72em] w-[1.55em] translate-y-[0.06em] rounded-full bg-[repeating-linear-gradient(90deg,#9fe3ec_0_0.09em,#c9b8f5_0.09em_0.2em,#e7d6fb_0.2em_0.28em)]" />
+                <span aria-hidden className="mb-[0.04em] mr-[0.22em] inline-block h-[0.72em] w-[1.55em] translate-y-[0.06em] rounded-full bg-[repeating-linear-gradient(90deg,#9fe3ec_0_0.09em,#c9b8f5_0.09em_0.2em,#e7d6fb_0.2em_0.28em)]" />
                 Billing experts
               </Line>
               <Line>that protect</Line>

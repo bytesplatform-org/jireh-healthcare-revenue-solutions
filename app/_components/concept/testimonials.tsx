@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { TESTIMONIALS } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { Star, cx } from "../ui/primitives";
-import { GRAD, Tag } from "./bits";
+import { GRAD } from "./bits";
 
 const REVIEWS = [
   { quote: TESTIMONIALS.featured.quote, name: TESTIMONIALS.featured.name, role: TESTIMONIALS.featured.role, tone: `${GRAD.violet} text-white`, size: "text-[clamp(1.1rem,1.6vw,1.45rem)]" },
@@ -50,8 +50,7 @@ export function ConceptTestimonials() {
       <div data-stage className="relative overflow-hidden px-5 py-24 sm:px-8 lg:h-svh lg:px-10 lg:py-0">
         <div className="mx-auto flex max-w-[1440px] items-start justify-between gap-6 lg:absolute lg:inset-x-0 lg:top-24 lg:px-10">
           <div>
-            <Tag>what agencies say</Tag>
-            <h2 id="reviews-title" className="mt-5 max-w-[12ch] text-[clamp(2.2rem,4vw,3.75rem)] leading-[1.04] font-medium tracking-[-0.035em] text-[#1a1530]">
+            <h2 id="reviews-title" className="max-w-[12ch] text-[clamp(2.2rem,4vw,3.75rem)] leading-[1.04] font-medium tracking-[-0.035em] text-[#1a1530]">
               Trusted by the agencies we serve.
             </h2>
           </div>

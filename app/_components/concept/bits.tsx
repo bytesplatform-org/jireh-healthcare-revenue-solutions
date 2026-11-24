@@ -22,16 +22,6 @@ export function Chip({ children, className }: { children: ReactNode; className?:
   return <span className={cx("inline-flex rounded-full bg-white px-3.5 py-1.5 text-[13px] font-medium text-[#1a1530]", className)}>{children}</span>;
 }
 
-/** Section label: outlined pill with a gradient dot. */
-export function Tag({ children, light }: { children: ReactNode; light?: boolean }) {
-  return (
-    <span className={cx("inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-medium ring-1", light ? "text-white ring-white/40" : "text-[#1a1530] ring-[#1a1530]/15")}>
-      <span aria-hidden className="size-2 rounded-full bg-[linear-gradient(135deg,#6f63e6,#5fa8f5)]" />
-      {children}
-    </span>
-  );
-}
-
 export function Arrow({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden className={cx("size-4", className)}>

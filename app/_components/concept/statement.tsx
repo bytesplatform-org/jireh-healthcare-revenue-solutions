@@ -3,7 +3,7 @@
 import { Fragment, useRef } from "react";
 import { HOME } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
-import { Orb, Tag, TEXT_GRAD } from "./bits";
+import { Orb, TEXT_GRAD } from "./bits";
 
 const bare = (w: string) => w.replace(/[.,;:!?—]+$/, "");
 
@@ -66,11 +66,10 @@ export function ConceptStatement() {
       <Orb data-depth="45" tint="lilac" className="absolute right-[24%] bottom-[6%] w-[clamp(44px,4.5vw,80px)]" />
 
       <div className="relative mx-auto max-w-[1440px]">
-        <Tag>the challenge</Tag>
         <h2 id="challenge-title" className="sr-only">
           {challenge.label}
         </h2>
-        <p data-para className="mt-8 max-w-[22ch] text-[clamp(2.1rem,4.6vw,4.6rem)] leading-[1.08] font-medium tracking-[-0.035em] text-[#1a1530]">
+        <p data-para className="max-w-[22ch] text-[clamp(2.1rem,4.6vw,4.6rem)] leading-[1.08] font-medium tracking-[-0.035em] text-[#1a1530]">
           {words.map((w, i) => (
             <Fragment key={i}>
               {i > 0 && " "}

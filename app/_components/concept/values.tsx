@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { MISSION } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { cx } from "../ui/primitives";
-import { GRAD, Orb, Tag } from "./bits";
+import { GRAD, Orb } from "./bits";
 
 const FILLS = [
   "linear-gradient(100deg,#6f63e6,#8b80f2 60%,#b3a8f8)",
@@ -48,13 +48,12 @@ export function ConceptValues() {
   return (
     <section ref={ref} id="mission" aria-labelledby="values-title" className="overflow-hidden bg-white py-24 md:py-32">
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
-        <Tag>mission &amp; vision</Tag>
         <h2 id="values-title" className="sr-only">
           Our values: Faith, Integrity, Excellence
         </h2>
       </div>
 
-      <div aria-hidden className="mt-10 flex flex-col items-center">
+      <div aria-hidden className="flex flex-col items-center">
         {MISSION.values.map((v, i) => (
           <p
             key={v.word}
@@ -88,8 +87,7 @@ export function ConceptValues() {
           <article key={c.label} data-mv className={cx("relative overflow-hidden rounded-[28px] p-7 sm:p-10", c.tone)}>
             <Orb tint={c.orb} className="absolute -top-[18%] -right-[10%] w-[40%] opacity-80" />
             <div className="relative">
-              <Tag light={c.orb === "violet"}>{c.label}</Tag>
-              <p className="mt-8 max-w-[26ch] text-[clamp(1.5rem,2.3vw,2.15rem)] leading-[1.15] font-medium tracking-[-0.025em]">{c.text}</p>
+              <p className="max-w-[26ch] text-[clamp(1.5rem,2.3vw,2.15rem)] leading-[1.15] font-medium tracking-[-0.025em]">{c.text}</p>
               <p className="mt-6 max-w-[48ch] text-[14.5px] leading-relaxed font-medium opacity-70">{c.more}</p>
             </div>
           </article>

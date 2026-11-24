@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { HOME, PROVIDERS, WAIVER, CYCLE } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { Icon, cx } from "../ui/primitives";
-import { GRAD, Orb, Tag } from "./bits";
+import { GRAD, Orb } from "./bits";
 
 const CARD = ["bg-[linear-gradient(150deg,#c9f1f4_0%,#8fdbe4_100%)] text-[#1a1530]", "bg-[linear-gradient(165deg,#f4ddf3_0%,#e5b9ec_100%)] text-[#1a1530]", `${GRAD.sky} text-white`, "bg-[#f3f2f9] text-[#1a1530]"];
 
@@ -79,8 +79,7 @@ export function ConceptBento() {
             <Orb tint="dusk" className="absolute -right-[10%] -bottom-[16%] w-[58%]" />
             <Orb tint="violet" className="absolute top-[12%] right-[30%] w-[12%]" />
             <div className="relative">
-              <Tag light>why outsource</Tag>
-              <h2 id="bento-title" className="mt-6 max-w-[16ch] text-[clamp(2rem,3.6vw,3.5rem)] leading-[1.04] font-medium tracking-[-0.035em]">
+              <h2 id="bento-title" className="max-w-[16ch] text-[clamp(2rem,3.6vw,3.5rem)] leading-[1.04] font-medium tracking-[-0.035em]">
                 {benefits.title}
               </h2>
             </div>

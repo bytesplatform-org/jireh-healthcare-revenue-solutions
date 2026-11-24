@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { WAIVER } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
-import { Orb, Tag } from "./bits";
+import { Orb } from "./bits";
 
 /**
  * Virginia ID/DD Waiver billing. Desktop + motion: the section pins, a small
@@ -54,10 +54,7 @@ export function ConceptWaiver() {
           <div className="relative mx-auto flex h-full max-w-[1400px] flex-col justify-center gap-10 px-5 py-16 sm:px-8 lg:px-10 lg:py-10">
             <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
               <div>
-                <div data-in>
-                  <Tag light>{WAIVER.label.toLowerCase()}</Tag>
-                </div>
-                <h2 data-in id="waiver-title" className="mt-6 max-w-[14ch] text-[clamp(2.4rem,5vw,4.75rem)] leading-[1.02] font-medium tracking-[-0.035em]">
+                <h2 data-in id="waiver-title" className="max-w-[14ch] text-[clamp(2.4rem,5vw,4.75rem)] leading-[1.02] font-medium tracking-[-0.035em]">
                   {WAIVER.title}
                 </h2>
               </div>

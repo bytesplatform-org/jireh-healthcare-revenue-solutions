@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ConceptHeader } from "../_components/concept/header";
 import { ConceptHero } from "../_components/concept/concept-hero";
 import { ConceptMarquee } from "../_components/concept/marquee";
 import { ConceptStatement } from "../_components/concept/statement";
@@ -19,7 +20,11 @@ export const metadata: Metadata = {
 /** The whole site as one page, in the bento / soft-gradient theme. */
 export default function HeroConceptPage() {
   return (
-    <div className="bg-white" style={{ fontFamily: "var(--font-urbanist), ui-sans-serif, system-ui, sans-serif" }}>
+    <div data-concept className="bg-white" style={{ fontFamily: "var(--font-urbanist), ui-sans-serif, system-ui, sans-serif" }}>
+      {/* White edge to edge: unpainted tiles in fast scrolls and the macOS overscroll
+          bounce show the body (paper elsewhere on the site), so whiten it on this page only. */}
+      <style>{"html,body{background:#fff}"}</style>
+      <ConceptHeader />
       <main id="main" className="overflow-x-clip">
         <ConceptHero />
         <ConceptMarquee />
