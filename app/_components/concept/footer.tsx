@@ -28,7 +28,7 @@ export function ConceptFooter() {
         gsap.fromTo(
           q("[data-letter]"),
           { yPercent: 110, rotate: (i: number) => (i % 2 ? 12 : -12) },
-          { yPercent: 0, rotate: 0, duration: 1.4, stagger: 0.07, ease: "expo.out", scrollTrigger: { trigger: q("[data-giant]")[0], start: "top 95%", once: true } },
+          { yPercent: 0, rotate: 0, duration: 1.4, stagger: 0.07, ease: "expo.out", scrollTrigger: { trigger: q("[data-giant]")[0], start: "top bottom", end: "bottom bottom", scrub: 0.6 } },
         );
       });
     },

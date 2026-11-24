@@ -10,6 +10,8 @@ type RevealProps<T extends ElementType> = {
   delay?: number;
   /** ScrollTrigger start. */
   start?: string;
+  /** ScrollTrigger end: the reveal is scrubbed from start to end (and back). */
+  end?: string;
 } & Omit<ComponentPropsWithoutRef<T>, "as" | "children">;
 
 /**
@@ -22,6 +24,7 @@ export function SplitReveal<T extends ElementType = "div">({
   children,
   delay = 0,
   start = "top 85%",
+  end = "top 50%",
   ...rest
 }: RevealProps<T>) {
   const Tag = (as ?? "div") as ElementType;
@@ -55,7 +58,7 @@ export function SplitReveal<T extends ElementType = "div">({
               ease: "expo.out",
               stagger: 0.07,
               delay,
-              scrollTrigger: { trigger: el, start, once: true },
+              scrollTrigger: { trigger: el, start, end, scrub: 0.6 },
             });
           },
         });
@@ -78,6 +81,7 @@ export function FadeUp<T extends ElementType = "div">({
   children,
   delay = 0,
   start = "top 88%",
+  end = "top 55%",
   ...rest
 }: RevealProps<T>) {
   const Tag = (as ?? "div") as ElementType;
@@ -97,7 +101,7 @@ export function FadeUp<T extends ElementType = "div">({
           ease: "expo.out",
           stagger: 0.06,
           delay,
-          scrollTrigger: { trigger: el, start, once: true },
+          scrollTrigger: { trigger: el, start, end, scrub: 0.6 },
         });
       });
     },

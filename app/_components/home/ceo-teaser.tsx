@@ -26,10 +26,10 @@ export function CeoTeaser() {
             clipPath: "inset(0% 0% 0% 0% round 999px 999px 18px 18px)",
             duration: 1.6,
             ease: "expo.inOut",
-            scrollTrigger: { trigger: frame, start: "top 80%", once: true },
+            scrollTrigger: { trigger: frame, start: "top 80%", end: "top 40%", scrub: 0.6 },
           },
         );
-        gsap.fromTo(q("[data-arch] img"), { scale: 1.3 }, { scale: 1, duration: 2, ease: "expo.out", scrollTrigger: { trigger: frame, start: "top 80%", once: true } });
+        gsap.fromTo(q("[data-arch] img"), { scale: 1.3 }, { scale: 1, duration: 2, ease: "expo.out", scrollTrigger: { trigger: frame, start: "top 80%", end: "top 40%", scrub: 0.6 } });
       });
     },
     { scope: ref },

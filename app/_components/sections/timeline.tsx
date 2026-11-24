@@ -21,12 +21,12 @@ export function Timeline() {
         q("[data-tl-item]").forEach((item, i) => {
           const card = item.querySelector("[data-tl-card]");
           const dot = item.querySelector("[data-tl-dot]");
-          gsap.from(card, { x: i % 2 ? 60 : -60, autoAlpha: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: item, start: "top 75%", once: true } });
+          gsap.from(card, { x: i % 2 ? 60 : -60, autoAlpha: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: item, start: "top 75%", end: "top 35%", scrub: 0.6 } });
           if (dot)
             gsap.fromTo(
               dot,
               { backgroundColor: "rgb(236 238 246)", scale: 0.6 },
-              { backgroundColor: "#11b7c9", scale: 1, duration: 0.5, ease: "back.out(3)", scrollTrigger: { trigger: item, start: "top 60%", toggleActions: "play none none reverse" } },
+              { backgroundColor: "#11b7c9", scale: 1, duration: 0.5, ease: "back.out(3)", scrollTrigger: { trigger: item, start: "top 70%", end: "top 50%", scrub: 0.6 } },
             );
         });
       });

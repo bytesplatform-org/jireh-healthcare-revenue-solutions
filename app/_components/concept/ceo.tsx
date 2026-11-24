@@ -29,10 +29,10 @@ export function ConceptCeo() {
         gsap.fromTo(
           q("[data-word]"),
           { yPercent: 100, rotateX: -80, autoAlpha: 0, transformPerspective: 700, transformOrigin: "50% 100%" },
-          { yPercent: 0, rotateX: 0, autoAlpha: 1, duration: 1, stagger: 0.04, ease: "expo.out", scrollTrigger: { trigger: q("h2")[0], start: "top 80%", once: true } },
+          { yPercent: 0, rotateX: 0, autoAlpha: 1, duration: 1, stagger: 0.04, ease: "expo.out", scrollTrigger: { trigger: q("h2")[0], start: "top 80%", end: "top 40%", scrub: 0.6 } },
         );
-        gsap.fromTo(q("[data-pop]"), { scale: 0.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: "back.out(2.2)", scrollTrigger: { trigger: q("[data-pops]")[0], start: "top 88%", once: true } });
-        gsap.fromTo(q("[data-fade]"), { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1, stagger: 0.1, ease: "expo.out", scrollTrigger: { trigger: q("[data-fade]")[0], start: "top 88%", once: true } });
+        gsap.fromTo(q("[data-pop]"), { scale: 0.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: "back.out(2.2)", scrollTrigger: { trigger: q("[data-pops]")[0], start: "top 88%", end: "top 48%", scrub: 0.6 } });
+        gsap.fromTo(q("[data-fade]"), { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1, stagger: 0.1, ease: "expo.out", scrollTrigger: { trigger: q("[data-fade]")[0], start: "top 88%", end: "top 48%", scrub: 0.6 } });
       });
     },
     { scope: ref },

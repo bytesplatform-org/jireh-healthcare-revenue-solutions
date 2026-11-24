@@ -38,8 +38,8 @@ export function ServiceRows() {
             onToggle: (self) => self.isActive && setActive(i),
           });
           const rule = row.querySelector("[data-rule]");
-          if (rule) gsap.from(rule, { scaleX: 0, duration: 1.4, ease: "expo.out", scrollTrigger: { trigger: row, start: "top 85%", once: true } });
-          gsap.from(row.querySelectorAll("[data-up]"), { y: 40, autoAlpha: 0, duration: 1.1, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: row, start: "top 80%", once: true } });
+          if (rule) gsap.from(rule, { scaleX: 0, duration: 1.4, ease: "expo.out", scrollTrigger: { trigger: row, start: "top 85%", end: "top 45%", scrub: 0.6 } });
+          gsap.from(row.querySelectorAll("[data-up]"), { y: 40, autoAlpha: 0, duration: 1.1, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: row, start: "top 80%", end: "top 40%", scrub: 0.6 } });
         });
         if (fill) {
           gsap.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: "none", scrollTrigger: { trigger: q("[data-rows]")[0], start: "top 55%", end: "bottom 55%", scrub: true } });

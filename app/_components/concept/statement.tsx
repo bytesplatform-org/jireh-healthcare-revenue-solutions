@@ -45,7 +45,7 @@ export function ConceptStatement() {
           const d = Number(el.dataset.depth);
           gsap.fromTo(el, { y: d * 4, rotate: -d / 2 }, { y: -d * 4, rotate: d / 2, ease: "none", scrollTrigger: { trigger: root, start: "top bottom", end: "bottom top", scrub: true } });
         });
-        gsap.fromTo(root.querySelectorAll("[data-answer]"), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.1, stagger: 0.1, ease: "expo.out", scrollTrigger: { trigger: root.querySelector("[data-answer]"), start: "top 85%", once: true } });
+        gsap.fromTo(root.querySelectorAll("[data-answer]"), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.1, stagger: 0.1, ease: "expo.out", scrollTrigger: { trigger: root.querySelector("[data-answer]"), start: "top 85%", end: "top 45%", scrub: 0.6 } });
         return () => words.forEach((w) => ((w.style.opacity = ""), (w.style.transform = "")));
       });
     },

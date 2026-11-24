@@ -31,7 +31,7 @@ export function Footer({ title = ["Let's strengthen your", "agency's financial h
           duration: 1.2,
           ease: "expo.out",
           stagger: 0.08,
-          scrollTrigger: { trigger: ref.current, start: "top 70%", once: true },
+          scrollTrigger: { trigger: ref.current, start: "top 70%", end: "top 30%", scrub: 0.6 },
         });
         gsap.from(q("[data-cta-rise]"), {
           y: 24,
@@ -39,7 +39,7 @@ export function Footer({ title = ["Let's strengthen your", "agency's financial h
           duration: 1,
           ease: "expo.out",
           stagger: 0.08,
-          scrollTrigger: { trigger: ref.current, start: "top 60%", once: true },
+          scrollTrigger: { trigger: ref.current, start: "top 60%", end: "top 25%", scrub: 0.6 },
         });
       });
     },

@@ -29,7 +29,7 @@ export function Waiver({ index = "05", arcPrev = true }: { index?: string; arcPr
           duration: 1.2,
           stagger: 0.12,
           ease: "expo.out",
-          scrollTrigger: { trigger: q("[data-tiles]")[0], start: "top 85%", once: true },
+          scrollTrigger: { trigger: q("[data-tiles]")[0], start: "top 85%", end: "top 45%", scrub: 0.6 },
         });
         const line = q("[data-sys-line]")[0];
         const stops = q("[data-sys-stop]");

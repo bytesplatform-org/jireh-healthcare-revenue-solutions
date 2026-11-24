@@ -26,8 +26,7 @@ const LINKS = CONCEPT_LINKS.slice(0, 3);
  * Scrolling back to the top morphs it back.
  *
  * While pinned: a gradient capsule slides behind the link of the section in
- * view, a gradient hairline along the pill's bottom fills with page progress,
- * and fast scrolling makes the pill lean into the motion.
+ * view, and fast scrolling makes the pill lean into the motion.
  */
 export function ConceptHeader() {
   const ref = useRef<HTMLElement>(null);
@@ -65,7 +64,6 @@ export function ConceptHeader() {
       const glass = q("[data-glass]")[0] as HTMLElement;
       const markEl = q("[data-mark]")[0] as HTMLElement;
       const links = q("[data-link]") as HTMLElement[];
-      const progress = q("[data-progress]")[0] as HTMLElement;
       const mm = gsap.matchMedia();
 
       mm.add({ motion: MQ.motion, reduce: MQ.reduce }, (ctx) => {
@@ -113,7 +111,6 @@ export function ConceptHeader() {
 
         const skewTo = gsap.quickTo(shell, "skewX", { duration: 0.4, ease: "power3.out" });
         const upright = gsap.delayedCall(0.15, () => skewTo(0)).pause();
-        const setProgress = gsap.quickSetter(progress, "scaleX");
 
         const st = ScrollTrigger.create({
           start: THRESHOLD,
@@ -124,7 +121,6 @@ export function ConceptHeader() {
           start: 0,
           end: "max",
           onUpdate: (self) => {
-            setProgress(self.progress);
             if (!isCompact || reduce) return;
             skewTo(gsap.utils.clamp(-5, 5, -self.getVelocity() / 600));
             upright.restart(true);
@@ -172,14 +168,12 @@ export function ConceptHeader() {
         className="pointer-events-auto relative mx-auto mt-5 px-2 sm:mt-6 sm:px-5 lg:mt-7 lg:px-7"
         style={{ maxWidth: 1440 }}
       >
-        {/* Glass: frosted white, a bright rim, a soft lift; plus the progress hairline */}
+        {/* Glass: frosted white, a bright rim, a soft lift */}
         <div
           data-glass
           aria-hidden
           className="invisible absolute inset-0 overflow-hidden rounded-[inherit] bg-[linear-gradient(180deg,rgb(255_255_255/0.72),rgb(255_255_255/0.42))] opacity-0 shadow-[0_18px_50px_-18px_rgb(60_50_140/0.45),inset_0_1px_0_rgb(255_255_255/0.9)] ring-1 ring-white/70 backdrop-blur-2xl backdrop-saturate-150"
-        >
-          <span data-progress className="absolute inset-x-6 bottom-0 h-[2px] origin-left rounded-full bg-[linear-gradient(90deg,#6f63e6,#5fa8f5,#d39be6)]" style={{ transform: "scaleX(0)" }} />
-        </div>
+        />
 
         <nav aria-label="Primary" className="relative flex h-11 items-center justify-between gap-6">
           <a href="#top" aria-label={`${SITE.name}, back to top`} className="flex shrink-0 items-center gap-2">

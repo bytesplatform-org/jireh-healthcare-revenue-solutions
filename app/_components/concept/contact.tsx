@@ -22,7 +22,7 @@ export function ConceptContact() {
       const mm = gsap.matchMedia();
       mm.add(MQ.motion, () => {
         const q = gsap.utils.selector(ref);
-        gsap.fromTo(q("[data-c]"), { y: 120, autoAlpha: 0, rotate: (i: number) => (i ? 2 : -2) }, { y: 0, autoAlpha: 1, rotate: 0, duration: 1.3, stagger: 0.12, ease: "expo.out", scrollTrigger: { trigger: ref.current, start: "top 75%", once: true } });
+        gsap.fromTo(q("[data-c]"), { y: 120, autoAlpha: 0, rotate: (i: number) => (i ? 2 : -2) }, { y: 0, autoAlpha: 1, rotate: 0, duration: 1.3, stagger: 0.12, ease: "expo.out", scrollTrigger: { trigger: ref.current, start: "top 75%", end: "top 35%", scrub: 0.6 } });
         q("[data-drift]").forEach((el, i) => gsap.to(el, { y: i ? 18 : -18, x: i ? -10 : 10, duration: 4 + i, yoyo: true, repeat: -1, ease: "sine.inOut" }));
       });
     },

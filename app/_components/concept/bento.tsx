@@ -34,7 +34,7 @@ export function ConceptBento() {
         gsap.fromTo(
           cards,
           { y: 140, rotateX: -42, autoAlpha: 0, transformPerspective: 1100, transformOrigin: "50% 100%" },
-          { y: 0, rotateX: 0, autoAlpha: 1, duration: 1.3, stagger: 0.09, ease: "expo.out", scrollTrigger: { trigger: root.querySelector("[data-grid]"), start: "top 82%", once: true } },
+          { y: 0, rotateX: 0, autoAlpha: 1, duration: 1.3, stagger: 0.09, ease: "expo.out", scrollTrigger: { trigger: root.querySelector("[data-grid]"), start: "top 82%", end: "top 42%", scrub: 0.6 } },
         );
 
         // pointer tilt
@@ -57,12 +57,13 @@ export function ConceptBento() {
         // counters
         gsap.utils.toArray<HTMLElement>("[data-to]", root).forEach((el) => {
           const n = { v: 0 };
+          el.textContent = "0"; // counts with the scroll, both ways
           gsap.to(n, {
             v: Number(el.dataset.to),
             duration: 1.8,
             ease: "power2.out",
             onUpdate: () => (el.textContent = String(Math.round(n.v))),
-            scrollTrigger: { trigger: el, start: "top 90%", once: true },
+            scrollTrigger: { trigger: el, start: "top 90%", end: "top 50%", scrub: 0.6 },
           });
         });
         return () => offs.forEach((o) => o());

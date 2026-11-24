@@ -39,7 +39,7 @@ export function ConceptValues() {
         gsap.fromTo(
           root.querySelectorAll("[data-mv]"),
           { y: 100, autoAlpha: 0, rotate: (i: number) => (i ? 3 : -3) },
-          { y: 0, autoAlpha: 1, rotate: 0, duration: 1.2, stagger: 0.12, ease: "expo.out", scrollTrigger: { trigger: root.querySelector("[data-mvs]"), start: "top 85%", once: true } },
+          { y: 0, autoAlpha: 1, rotate: 0, duration: 1.2, stagger: 0.12, ease: "expo.out", scrollTrigger: { trigger: root.querySelector("[data-mvs]"), start: "top 85%", end: "top 45%", scrub: 0.6 } },
         );
       });
     },
