@@ -59,7 +59,7 @@ export function ConceptValues() {
           <p
             key={v.word}
             data-value
-            className="text-[clamp(4.5rem,17vw,17rem)] leading-[0.92] font-semibold tracking-[-0.06em] whitespace-nowrap text-transparent"
+            className="-mt-[0.1em] -mb-[0.26em] pt-[0.1em] pb-[0.26em] text-[clamp(4.5rem,17vw,17rem)] leading-[0.92] font-semibold tracking-[-0.06em] whitespace-nowrap text-transparent"
             style={{
               backgroundImage: `${FILLS[i]}, linear-gradient(#efedf6,#efedf6)`,
               backgroundRepeat: "no-repeat",

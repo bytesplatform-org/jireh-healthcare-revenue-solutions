@@ -34,7 +34,7 @@ export function ConceptHero() {
         const count = q("[data-count]")[0] as HTMLElement | undefined;
 
         const off = onIntro((tl) => {
-          tl.fromTo(q("[data-line]"), { yPercent: 110 }, { yPercent: 0, duration: 1.2, stagger: 0.08, ease: "expo.out" }, 0.7)
+          tl.fromTo(q("[data-line]"), { yPercent: 130 }, { yPercent: 0, duration: 1.2, stagger: 0.08, ease: "expo.out" }, 0.7)
             .fromTo(q("[data-rise]"), { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1, stagger: 0.08, ease: "expo.out" }, 1.05)
             .fromTo(q("[data-card]"), { y: 60, scale: 0.94, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, duration: 1.2, stagger: 0.12, ease: "expo.out" }, 0.8);
           if (count) {
@@ -237,7 +237,7 @@ export function ConceptHero() {
 
 function Line({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <span className="block overflow-hidden pb-[0.06em]">
+    <span className="-mb-[0.16em] block overflow-hidden pb-[0.22em]">
       <span data-line className={className ?? "block"}>
         {children}
       </span>

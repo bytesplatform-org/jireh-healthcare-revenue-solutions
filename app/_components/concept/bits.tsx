@@ -15,7 +15,8 @@ export const GRAD = {
 export type Grad = keyof typeof GRAD;
 
 /** Text gradient used for highlighted words and the footer wordmark. */
-export const TEXT_GRAD = "bg-[linear-gradient(100deg,#6f63e6_0%,#5fa8f5_45%,#d39be6_100%)] bg-clip-text text-transparent";
+/** Padded at the bottom (and pulled back) so descenders (g, p, y) sit inside the painted box. */
+export const TEXT_GRAD = "bg-[linear-gradient(100deg,#6f63e6_0%,#5fa8f5_45%,#d39be6_100%)] bg-clip-text text-transparent pb-[0.2em] -mb-[0.2em]";
 
 /** Small white pill label used on cards ("services", "experience"…). */
 export function Chip({ children, className }: { children: ReactNode; className?: string }) {

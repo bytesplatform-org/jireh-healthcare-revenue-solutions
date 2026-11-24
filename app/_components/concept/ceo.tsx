@@ -28,7 +28,7 @@ export function ConceptCeo() {
         gsap.fromTo(q("[data-portrait] img"), { scale: 1.45 }, { scale: 1, ease: "none", scrollTrigger: { trigger: card, start: "top 90%", end: "bottom 30%", scrub: 0.8 } });
         gsap.fromTo(
           q("[data-word]"),
-          { yPercent: 100, rotateX: -80, autoAlpha: 0, transformPerspective: 700, transformOrigin: "50% 100%" },
+          { yPercent: 125, rotateX: -80, autoAlpha: 0, transformPerspective: 700, transformOrigin: "50% 100%" },
           { yPercent: 0, rotateX: 0, autoAlpha: 1, duration: 1, stagger: 0.04, ease: "expo.out", scrollTrigger: { trigger: q("h2")[0], start: "top 80%", end: "top 40%", scrub: 0.6 } },
         );
         gsap.fromTo(q("[data-pop]"), { scale: 0.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: "back.out(2.2)", scrollTrigger: { trigger: q("[data-pops]")[0], start: "top 88%", end: "top 48%", scrub: 0.6 } });
@@ -59,7 +59,7 @@ export function ConceptCeo() {
             <span className="sr-only">{headline}</span>
             <span aria-hidden>
               {headline.split(" ").map((w, i) => (
-                <span key={i} className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+                <span key={i} className="-mb-[0.14em] inline-block overflow-hidden pb-[0.22em] align-bottom">
                   <span data-word className="inline-block">
                     {w}&nbsp;
                   </span>

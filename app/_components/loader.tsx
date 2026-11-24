@@ -347,7 +347,7 @@ function LoaderContent({ priority }: { priority: boolean }) {
 
       <div className="relative flex flex-1 items-center justify-center px-5">
         <div data-lockup className="flex flex-col items-center text-center">
-          <Image src={markClear} alt="" priority={priority} className="h-14 w-auto sm:h-16" sizes="100px" />
+          <Image src={markClear} alt="" priority={priority} className="h-[clamp(88px,11vw,150px)] w-auto" sizes="240px" />
           {/* the striped pill from the headline, filling with the charge */}
           <div className="relative mt-8 h-[clamp(44px,7vw,72px)] w-[clamp(220px,34vw,420px)] rounded-full bg-[#f1eff8]">
             <div data-fill className="absolute inset-0 rounded-full bg-[repeating-linear-gradient(90deg,#9fe3ec_0_10px,#c9b8f5_10px_22px,#e7d6fb_22px_30px)] [clip-path:inset(0_100%_0_0_round_999px)]" />
