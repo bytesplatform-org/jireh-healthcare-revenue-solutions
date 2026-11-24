@@ -23,6 +23,7 @@ import cbcs from "@/public/brand/cbcs-badge.png";
  */
 export function ConceptHero() {
   const ref = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -82,9 +83,33 @@ export function ConceptHero() {
     { scope: ref },
   );
 
+  // Hand-off to the next section: the hero stays pinned while the next section
+  // slides up over it like a sheet; underneath, the hero settles into a rounded
+  // card on a pale backdrop and dims.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add(MQ.motion, () => {
+        const stage = stageRef.current;
+        const panel = ref.current;
+        if (!stage || !panel) return;
+        // one timeline owns the pin and the motion, so they share a single trigger
+        gsap
+          .timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: { trigger: stage, start: "top top", end: "bottom top", pin: true, pinSpacing: false, scrub: true, invalidateOnRefresh: true },
+          })
+          .fromTo(panel, { scale: 1, borderRadius: 0 }, { scale: 0.84, borderRadius: 48, ease: "power2.out" }, 0)
+          .fromTo(panel.querySelector("[data-hero-body]"), { autoAlpha: 1, y: 0 }, { autoAlpha: 0.25, y: () => -window.innerHeight * 0.04 }, 0);
+      });
+    },
+    { dependencies: [] },
+  );
+
   return (
-    <div ref={ref} id="top" className="flex min-h-svh flex-col bg-white text-[#1a1530]">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-5 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-7">
+    <div ref={stageRef} className="bg-[#e9e6f5]">
+    <div ref={ref} id="top" className="relative flex min-h-svh origin-[50%_35%] flex-col overflow-hidden bg-white text-[#1a1530] will-change-transform">
+      <div data-hero-body className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-5 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-7">
         {/* room for the fixed ConceptHeader, which sits here at the top of the page */}
         <div aria-hidden className="h-11 shrink-0" />
 
@@ -200,9 +225,12 @@ export function ConceptHero() {
           </div>
         </div>
       </div>
+
+    </div>
     </div>
   );
 }
+
 
 /* ------------------------------------------------------------------ */
 

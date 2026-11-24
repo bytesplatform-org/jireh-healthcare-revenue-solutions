@@ -55,7 +55,7 @@ export function ConceptMarquee() {
   const rows = [PROVIDERS.slice(0, half), PROVIDERS.slice(half)];
 
   return (
-    <section ref={ref} aria-label="Who we serve" className="overflow-hidden bg-white py-16 md:py-24">
+    <section ref={ref} aria-label="Who we serve" className="relative z-10 overflow-hidden rounded-t-[40px] bg-white py-16 shadow-[0_-40px_80px_-40px_rgb(40_30_120/0.35)] md:py-24">
       <ul className="sr-only">
         {PROVIDERS.map((p) => (
           <li key={p}>{p}</li>
