@@ -4,7 +4,8 @@ import { useRef } from "react";
 import { MISSION } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { cx } from "../ui/primitives";
-import { GRAD, Orb } from "./bits";
+import { GRAD } from "./bits";
+import { Glass } from "./glass";
 
 const FILLS = [
   "linear-gradient(100deg,#6f63e6,#8b80f2 60%,#b3a8f8)",
@@ -81,11 +82,11 @@ export function ConceptValues() {
 
       <div data-mvs className="mx-auto mt-16 grid max-w-[1440px] gap-3 px-5 sm:gap-4 sm:px-8 md:grid-cols-2 lg:px-10">
         {[
-          { label: "our mission", text: MISSION.mission, more: MISSION.missionMore, tone: `${GRAD.dusk} text-white`, orb: "violet" as const },
-          { label: "our vision", text: MISSION.vision, more: MISSION.visionMore, tone: "bg-[#f3f2f9] text-[#1a1530]", orb: "lilac" as const },
+          { label: "our mission", text: MISSION.mission, more: MISSION.missionMore, tone: `${GRAD.dusk} text-white`, orb: "violet" as const, glass: "heart" as const },
+          { label: "our vision", text: MISSION.vision, more: MISSION.visionMore, tone: "bg-[#f3f2f9] text-[#1a1530]", orb: "lilac" as const, glass: "chart" as const },
         ].map((c) => (
           <article key={c.label} data-mv className={cx("relative overflow-hidden rounded-[28px] p-7 sm:p-10", c.tone)}>
-            <Orb tint={c.orb} className="absolute -top-[18%] -right-[10%] w-[40%] opacity-80" />
+            <Glass kind={c.glass} tint={c.orb} className="absolute -top-[10%] -right-[4%] w-[30%]" />
             <div className="relative">
               <p className="max-w-[26ch] text-[clamp(1.5rem,2.3vw,2.15rem)] leading-[1.15] font-medium tracking-[-0.025em]">{c.text}</p>
               <p className="mt-6 max-w-[48ch] text-[14.5px] leading-relaxed font-medium opacity-70">{c.more}</p>

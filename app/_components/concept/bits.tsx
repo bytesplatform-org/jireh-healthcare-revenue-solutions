@@ -44,28 +44,3 @@ export function ArrowButton({ large, dark }: { large?: boolean; dark?: boolean }
     </span>
   );
 }
-
-const ORB_TINT = {
-  violet: "rgb(70 55 190 / 0.5)",
-  sky: "rgb(30 80 180 / 0.4)",
-  lilac: "rgb(170 80 190 / 0.35)",
-  aqua: "rgb(20 130 150 / 0.4)",
-  dusk: "rgb(10 5 40 / 0.6)",
-} as const;
-
-/** A clear glass sphere (pure CSS); size it with className. */
-export function Orb({ tint = "violet", className, ...rest }: { tint?: Grad; className?: string } & Record<`data-${string}`, string | number | boolean>) {
-  const shade = ORB_TINT[tint];
-  return (
-    <div
-      aria-hidden
-      {...rest}
-      className={cx("pointer-events-none aspect-square rounded-full", className)}
-      style={{
-        background:
-          "radial-gradient(circle at 32% 28%, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0.22) 22%, transparent 40%), radial-gradient(circle at 68% 76%, rgb(255 255 255 / 0.45), transparent 42%), linear-gradient(160deg, rgb(255 255 255 / 0.35), rgb(255 255 255 / 0.05))",
-        boxShadow: `inset -14px -18px 34px ${shade}, inset 10px 12px 24px rgb(255 255 255 / 0.55), 0 24px 50px -18px ${shade}`,
-      }}
-    />
-  );
-}

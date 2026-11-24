@@ -11,7 +11,7 @@ import {
   setTransitionHandler,
   waitForRoute,
 } from "./motion/page-transition";
-import { Orb } from "./concept/bits";
+import { Glass } from "./concept/glass";
 import markClear from "@/public/brand/jireh-mark-clear.png";
 import {
   getLenis,
@@ -341,9 +341,9 @@ export function Loader() {
 function LoaderContent({ priority }: { priority: boolean }) {
   return (
     <div className="absolute inset-0 flex flex-col">
-      <Orb data-orb="" tint="violet" className="absolute top-[9%] right-[9%] w-[clamp(80px,11vw,170px)]" />
-      <Orb data-orb="" tint="sky" className="absolute bottom-[22%] left-[7%] w-[clamp(54px,6vw,100px)]" />
-      <Orb data-orb="" tint="lilac" className="absolute top-[30%] left-[22%] w-[clamp(28px,3vw,50px)]" />
+      <Glass kind="shield" data-orb="" tint="violet" className="absolute top-[9%] right-[9%] w-[clamp(80px,10vw,160px)]" />
+      <Glass kind="coin" data-orb="" tint="sky" className="absolute bottom-[22%] left-[7%] w-[clamp(60px,6.5vw,110px)]" />
+      <Glass kind="claim" data-orb="" tint="lilac" className="absolute top-[28%] left-[20%] w-[clamp(36px,3.6vw,60px)]" />
 
       <div className="relative flex flex-1 items-center justify-center px-5">
         <div data-lockup className="flex flex-col items-center text-center">

@@ -7,6 +7,7 @@ import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { onIntro } from "../motion/intro";
 import { cx } from "../ui/primitives";
 import { Arrow, ArrowButton, Chip } from "./bits";
+import { Glass } from "./glass";
 import ceo from "@/public/images/ceo-tammy.webp";
 import swam from "@/public/brand/swam-certified.webp";
 import cbcs from "@/public/brand/cbcs-badge.png";
@@ -303,18 +304,14 @@ function GlassBlob() {
   );
 }
 
-/** Services card: a clear sphere resting on a ring. */
+/** Services card: the revenue cycle, as glass arrows chasing each other round. */
 function GlassSphere() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0">
-      <div data-lean="-18" className="absolute top-[30%] left-[-30%] h-[42%] w-[150%]">
-        <div className="absolute inset-0 rounded-[50%] border-[14px] border-white/35 shadow-[inset_0_6px_18px_rgb(255_255_255/0.6),0_10px_30px_rgb(30_80_180/0.25)]" />
-      </div>
-      <div data-lean="22" className="absolute top-[4%] left-[18%] w-[62%]">
-        <div
-          data-float
-          className="aspect-square rounded-full bg-[radial-gradient(circle_at_32%_28%,rgb(255_255_255/0.95),rgb(255_255_255/0.2)_22%,transparent_40%),radial-gradient(circle_at_65%_78%,rgb(255_255_255/0.5),transparent_40%),linear-gradient(160deg,rgb(255_255_255/0.35),rgb(60_130_240/0.25))] shadow-[inset_-14px_-16px_30px_rgb(30_80_180/0.35),inset_10px_12px_24px_rgb(255_255_255/0.5),0_24px_40px_-14px_rgb(30_80_180/0.5)]"
-        />
+      <div data-lean="22" className="absolute top-[6%] left-[22%] w-[56%]">
+        <div data-float>
+          <Glass kind="cycle" tint="sky" />
+        </div>
       </div>
     </div>
   );

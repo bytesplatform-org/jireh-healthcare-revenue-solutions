@@ -3,7 +3,8 @@
 import { Fragment, useRef } from "react";
 import { HOME } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
-import { Orb, TEXT_GRAD } from "./bits";
+import { TEXT_GRAD } from "./bits";
+import { Glass } from "./glass";
 
 const bare = (w: string) => w.replace(/[.,;:!?—]+$/, "");
 
@@ -61,9 +62,9 @@ export function ConceptStatement() {
 
   return (
     <section ref={ref} aria-labelledby="challenge-title" className="relative overflow-hidden bg-white px-5 py-24 sm:px-8 md:py-36 lg:px-10">
-      <Orb data-depth="30" tint="violet" className="absolute top-[6%] right-[6%] w-[clamp(90px,12vw,190px)]" />
-      <Orb data-depth="-18" tint="sky" className="absolute bottom-[18%] left-[3%] w-[clamp(60px,7vw,120px)]" />
-      <Orb data-depth="45" tint="lilac" className="absolute right-[24%] bottom-[6%] w-[clamp(44px,4.5vw,80px)]" />
+      <Glass kind="claim" data-depth="30" tint="violet" className="absolute top-[6%] right-[6%] w-[clamp(100px,13vw,200px)]" />
+      <Glass kind="shield" data-depth="-18" tint="sky" className="absolute bottom-[18%] left-[3%] w-[clamp(64px,7.5vw,128px)]" />
+      <Glass kind="coin" data-depth="45" tint="lilac" className="absolute right-[24%] bottom-[6%] w-[clamp(50px,5vw,90px)]" />
 
       <div className="relative mx-auto max-w-[1440px]">
         <h2 id="challenge-title" className="sr-only">

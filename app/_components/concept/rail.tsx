@@ -4,11 +4,14 @@ import { useRef } from "react";
 import { CYCLE } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { Icon, cx } from "../ui/primitives";
-import { Chip, GRAD, Orb, type Grad } from "./bits";
+import { Chip, GRAD, type Grad } from "./bits";
+import { Glass, type GlassKind } from "./glass";
 
 const TONES: Grad[] = ["violet", "sky", "lilac", "aqua", "violet", "sky"];
 /** Pastel cards carry ink text; saturated ones white. */
 const LIGHT = new Set<Grad>(["lilac", "aqua"]);
+/** The glass object for each stage of the cycle. */
+const STAGE_GLASS: Record<string, GlassKind> = { eligibility: "shield", claims: "claim", posting: "coin", ar: "cycle", denials: "seal", reporting: "chart" };
 
 /**
  * How we work: the six stages of the revenue cycle as gradient cards.
@@ -56,7 +59,7 @@ export function ConceptRail() {
             { rotate: 0, scale: 1, yPercent: 0, ease: "power2.out", scrollTrigger: { trigger: card, containerAnimation: slide, start: "left right", end: "left 45%", scrub: true } },
           );
           const orb = card.querySelector("[data-roll]");
-          if (orb) gsap.fromTo(orb, { xPercent: 60, rotate: 120 }, { xPercent: 0, rotate: 0, ease: "none", scrollTrigger: { trigger: card, containerAnimation: slide, start: "left right", end: "right 40%", scrub: true } });
+          if (orb) gsap.fromTo(orb, { xPercent: 45, rotate: 24 }, { xPercent: 0, rotate: 0, ease: "none", scrollTrigger: { trigger: card, containerAnimation: slide, start: "left right", end: "right 40%", scrub: true } });
         });
       });
     },
@@ -97,7 +100,7 @@ export function ConceptRail() {
                 "min-h-[360px]",
               )}
             >
-              <Orb data-roll="" tint={TONES[i]} className="absolute -right-[12%] -bottom-[18%] w-[62%] opacity-90" />
+              <Glass kind={STAGE_GLASS[s.key]} data-roll="" tint={TONES[i]} className="absolute -right-[7%] -bottom-[9%] w-[36%]" />
               <div className="relative flex items-center justify-between">
                 <Chip>{s.short.toLowerCase()}</Chip>
                 <span className="grid size-11 place-items-center rounded-full bg-white/30 backdrop-blur-sm">

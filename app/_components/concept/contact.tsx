@@ -6,7 +6,8 @@ import { SITE } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
 import { Magnetic } from "../motion/magnetic";
 import { cx } from "../ui/primitives";
-import { Arrow, GRAD, Orb } from "./bits";
+import { Arrow, GRAD } from "./bits";
+import { Glass } from "./glass";
 
 /**
  * Contact: a violet card (call, email, hours) beside the consultation form.
@@ -32,8 +33,8 @@ export function ConceptContact() {
     <section ref={ref} id="contact" aria-labelledby="contact-title" className="bg-white px-5 py-24 sm:px-8 md:py-32 lg:px-10">
       <div className="mx-auto grid max-w-[1440px] gap-3 sm:gap-4 lg:grid-cols-[0.9fr_1.1fr]">
         <div data-c className={cx("relative flex min-h-[420px] flex-col justify-between overflow-hidden rounded-[28px] p-7 text-white sm:p-10", GRAD.violet)}>
-          <Orb data-drift="" tint="violet" className="absolute -right-[12%] -bottom-[10%] w-[60%]" />
-          <Orb data-drift="" tint="sky" className="absolute top-[10%] right-[18%] w-[14%]" />
+          <Glass kind="claim" data-drift="" tint="violet" className="absolute -right-[4%] -bottom-[4%] w-[46%]" />
+          <Glass kind="coin" data-drift="" tint="sky" className="absolute top-[8%] right-[10%] w-[16%]" />
           <div className="relative">
             <h2 id="contact-title" className="max-w-[13ch] text-[clamp(2.3rem,4.2vw,4rem)] leading-[1.02] font-medium tracking-[-0.035em]">
               Ready to take billing off your plate?

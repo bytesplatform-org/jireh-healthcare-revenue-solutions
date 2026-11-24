@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { WAIVER } from "@/lib/content";
 import { gsap, useGSAP, MQ } from "../motion/gsap";
-import { Orb } from "./bits";
+import { Glass } from "./glass";
 
 /**
  * Virginia ID/DD Waiver billing. Desktop + motion: the section pins, a small
@@ -42,8 +42,8 @@ export function ConceptWaiver() {
           data-flood
           className="relative h-full overflow-hidden rounded-[30px] bg-[radial-gradient(120%_120%_at_20%_10%,#8b80f2_0%,#6f63e6_35%,#3b2f8f_75%,#2a2160_100%)] text-white"
         >
-          <Orb data-flood-orb="" tint="sky" className="absolute -top-[14%] -right-[8%] w-[38vw] max-w-[560px] opacity-80" />
-          <Orb tint="lilac" className="absolute bottom-[8%] left-[38%] w-[7vw] max-w-[110px] opacity-80" />
+          <Glass kind="heart" data-flood-orb="" tint="lilac" className="absolute right-[3%] bottom-[5%] w-[17vw] max-w-[260px]" />
+          <Glass kind="claim" tint="sky" className="absolute bottom-[7%] left-[30%] w-[5.5vw] max-w-[90px]" />
 
           <p data-teaser aria-hidden className="pointer-events-none absolute top-1/2 left-1/2 hidden -translate-1/2 text-center text-[clamp(1rem,1.4vw,1.25rem)] leading-tight font-medium lg:block">
             Virginia
