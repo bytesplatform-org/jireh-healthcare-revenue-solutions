@@ -1,26 +1,234 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------ */
+/* Theme                                                               */
+/* Editorial and quiet: warm paper, the client's indigo as ink and as  */
+/* the (flat) dark surface, teal kept for small accents. No gradients, */
+/* glows, grids or glass.                                              */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* the client's indigo: text on paper, and every dark section */
+  --color-indigo: #1a0d4a;
+  --color-night: #1a0d4a;
+  /* one step up from indigo, for cards on dark sections */
+  --color-indigo-2: #261863;
+  --color-violet: #3b2d7a;
+  --color-teal: #11b7c9;
+  --color-teal-bright: #3fcad8;
+  /* teal dark enough for text on paper (≈4.8:1) */
+  --color-teal-deep: #0a7a87;
+  --color-paper: #f5f2ec;
+  --color-cloud: #ebe6dc;
+  --color-mint: #e1eeeb;
+  --color-lilac: #e9e5ee;
+  --color-gold: #d9a12c;
+  --color-check: #1f9d63;
+
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  /* no mono voice: numbers use the sans with tabular figures */
+  --font-mono: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+/* Context-aware tokens: `text-fg`, `text-muted`, `border-line` adapt to the surface. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-fg: var(--fg);
+  --color-accent: var(--accent);
 }
 
-@media (prefers-color-scheme: dark) {
+:root {
+  --arc-depth: 8vh;
+  --fg: var(--color-indigo);
+  --line: rgb(26 13 74 / 0.13);
+  --muted: rgb(26 13 74 / 0.66);
+  --accent: var(--color-teal-deep);
+  color-scheme: light;
+}
+
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --arc-depth: 16vh;
   }
 }
 
+.surface-dark {
+  --fg: var(--color-paper);
+  --line: rgb(245 242 236 / 0.16);
+  --muted: rgb(245 242 236 / 0.7);
+  --accent: var(--color-teal);
+  color: var(--color-paper);
+}
+
+.surface-light {
+  --fg: var(--color-indigo);
+  --line: rgb(26 13 74 / 0.13);
+  --muted: rgb(26 13 74 / 0.66);
+  --accent: var(--color-teal-deep);
+  color: var(--color-indigo);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-indigo);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-teal);
+  color: var(--color-indigo);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-teal-deep);
+  outline-offset: 3px;
+}
+.surface-dark :focus-visible {
+  outline-color: var(--color-teal);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* ------------------------------------------------------------------ */
+/* Type                                                                */
+/* ------------------------------------------------------------------ */
+/* Newsreader: every heading. */
+@utility font-display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Newsreader italic, for the odd emphasised phrase (same colour as its line). */
+@utility font-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+@utility text-hero {
+  font-size: clamp(2.75rem, 5.2vw, 5.5rem);
+  line-height: 1.02;
+}
+
+@utility text-h2 {
+  font-size: clamp(2.1rem, 3.9vw, 3.75rem);
+  line-height: 1.06;
+}
+
+@utility text-h3 {
+  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+  line-height: 1.15;
+}
+
+@utility text-lede {
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.55;
+}
+
+/* Small uppercase labels (sans, not mono). */
+@utility text-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* A section that rises over the previous one with a curved top (pair with <ArcSurface>). */
+@utility arc-next {
+  margin-top: calc(-1 * var(--arc-depth));
+  padding-top: calc(var(--arc-depth) + 3rem);
+}
+/* The section above an arc-next section: keeps its content clear of the curve. */
+@utility arc-prev {
+  padding-bottom: calc(var(--arc-depth) + 5rem);
+}
+
+/* A pinned, screen-sized scene (dvh beats ScrollTrigger's inline px height). */
+.pin-screen {
+  height: 100svh;
+}
+@supports (height: 100dvh) {
+  .pin-screen {
+    height: 100dvh !important;
+    max-height: none !important;
+  }
+}
+
+/* Marquee (CSS-only so it runs without JS; paused on hover / reduced motion). */
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.marquee-track {
+  animation: marquee var(--marquee-speed, 48s) linear infinite;
+  animation-direction: var(--marquee-dir, normal);
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Scrubbed paragraphs: words come up from dim as the reading head passes. */
+.is-scrub [data-hi].is-lit,
+[data-hi]:not(.is-scrub *) {
+  color: var(--accent);
+}
+
+/* Page loader: scroll stays locked while it covers the page. */
+html.is-loading {
+  overflow: hidden;
+}
+.loader-failsafe {
+  animation: loader-failsafe 0.5s 10s forwards;
+}
+html.jh-resume [data-count] {
+  opacity: 0;
+}
+@keyframes loader-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion preferences                                                  */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-motion-only] {
+    display: none !important;
+  }
 }

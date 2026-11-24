@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jireh Healthcare Revenue Solutions — website
 
-## Getting Started
-
-First, run the development server:
+Redesign of jirehhealthcarerevenuesolutions.com (currently on Hostinger AI Builder) as a
+Next.js 16 site, built on the same motion system as FernGrid Energy and Mobile Lab Draws
+(GSAP + ScrollTrigger + SplitText, Lenis smooth scroll, loader / page transitions, curved
+section edges).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev      # http://localhost:3000
+npm run build && npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Pages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | Highlights |
+| --- | --- |
+| `/` | Editorial hero (serif headline, two photos, certification strip), scrubbed "challenge" statement, provider marquee, **pinned revenue-cycle ring** (scroll drives a claim through the six stages), stacking benefit cards, Virginia ID/DD Waiver, CEO teaser, testimonials |
+| `/services` | Jump list, service rows with a sticky rolling counter, waiver section, provider cloud, consultation form |
+| `/about-the-ceo` | Portrait hero, scrubbed bio, organisations marquee, drawn timeline, leadership + advocacy |
+| `/mission-and-vision` | Mission / vision read-ins, full-bleed team photo, pinned **Faith · Integrity · Excellence** |
+| `/book-a-free-consultation` | Call card, how-it-works steps, consultation form |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Routes match the current site so existing links keep working.
 
-## Learn More
+## Theme
 
-To learn more about Next.js, take a look at the following resources:
+Warm paper (`#F5F2EC`) with the client's indigo (`#1A0D4A`) as ink and as the flat dark
+surface; teal (`#11B7C9`) only for small accents and the CTA on dark sections. Newsreader
+for headings, Instrument Sans for everything else. Deliberately no gradients, glows, grid
+backgrounds, glass cards or mock dashboard UI. Tokens live in `app/globals.css`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+All copy lives in `lib/content.ts` (taken from the current site, typos fixed). Lines marked
+`NEW` are short connective lines written for the redesign — have the client review them, as
+well as the "Jireh — the Lord will provide" card on Mission & Vision.
 
-## Deploy on Vercel
+Images in `public/images` come from the current site (client uploads + the Unsplash photos
+it already uses). `public/brand` holds the logo (trimmed, split into mark + wordmark), SWaM
+and CBCS badges. The "Circles" book cover on the CEO page is a typographic placeholder —
+swap in the real cover if the client has one.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Consultation form
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`app/actions/consultation.ts` sends requests through [Resend](https://resend.com) when these
+are set:
+
+```
+RESEND_API_KEY=...
+INQUIRY_TO=support@jirehhealthcarerevenuesolutions.com
+INQUIRY_FROM=website@<a domain verified in Resend>
+```
+
+Until then the form validates and then offers the visitor a ready-made email (mailto / copy)
+plus the phone number, so no request is lost.
+
+## Not carried over
+
+- Spanish / French versions (`/es`, `/fr`) — the current site machine-translates; add
+  `next-intl` or similar if the client wants them.
+
+## Motion notes
+
+- Everything respects `prefers-reduced-motion` (static layouts, no pins, no loader).
+- Pinned scenes (`revenue-cycle.tsx`, `values.tsx`) only pin on desktop + motion; mobile gets
+  stacked layouts.
+- `app/_components/motion/*` is shared with FernGrid; keep fixes in sync.
