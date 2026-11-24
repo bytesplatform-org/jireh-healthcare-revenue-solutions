@@ -13,7 +13,7 @@ const instrumentSans = Instrument_Sans({
   display: "swap",
 });
 
-/** The concept theme's grotesk (loader + /hero-concept). */
+/** The concept theme's grotesk (loader + home page). */
 const urbanist = Urbanist({
   variable: "--font-urbanist",
   subsets: ["latin"],

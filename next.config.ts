@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     agentFeedback: true,
   },
   cacheComponents: true,
+  // the home page was developed here as a concept
+  redirects() {
+    return [{ source: "/hero-concept", destination: "/", permanent: true }];
+  },
   partialPrefetching: true,
   turbopack: {
     rules: {

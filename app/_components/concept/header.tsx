@@ -17,8 +17,6 @@ const THRESHOLD = 80;
 const PILL_MAX = 1080;
 /** The site's pages (as on the current live site). */
 const LINKS = [...NAV_LINKS, { label: "Book a Free Consultation", href: ROUTES.book }] as const;
-/** This concept is the future home page, so it lights "Home". */
-const HOME_ALIASES = new Set(["/", "/hero-concept"]);
 
 /**
  * Concept page header, fixed to the top.
@@ -41,7 +39,7 @@ export function ConceptHeader() {
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const pathname = usePathname();
-  const active = LINKS.findIndex((l) => (l.href === ROUTES.home ? HOME_ALIASES.has(pathname) : pathname === l.href));
+  const active = LINKS.findIndex((l) => pathname === l.href);
 
   // the menu closes on Escape and when the viewport grows past it
   useEffect(() => {
