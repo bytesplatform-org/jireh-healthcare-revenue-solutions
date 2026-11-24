@@ -114,7 +114,8 @@ export function ConceptHeader() {
 
         const st = ScrollTrigger.create({
           start: THRESHOLD,
-          end: "max",
+          // past the end of any page: reaching the very bottom must not count as leaving
+          end: "+=1000000",
           onToggle: (self) => (self.isActive ? toPill() : toBar()),
         });
         const page = ScrollTrigger.create({
