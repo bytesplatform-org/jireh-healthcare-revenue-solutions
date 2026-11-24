@@ -8,6 +8,9 @@ import { Chip, GRAD, type Grad } from "./bits";
 import { Glass, type GlassKind } from "./glass";
 
 const TONES: Grad[] = ["violet", "sky", "lilac", "aqua", "violet", "sky"];
+/** The dark stage is built from this many stripe columns, alternating these shades. */
+const CURTAIN_BARS = 14;
+const CURTAIN_SHADES = ["#1c1644", "#221b4f", "#1f1849"];
 /** Pastel cards carry ink text; saturated ones white. */
 const LIGHT = new Set<Grad>(["lilac", "aqua"]);
 /** The glass object for each stage of the cycle. */
@@ -21,6 +24,30 @@ const STAGE_GLASS: Record<string, GlassKind> = { eligibility: "shield", claims: 
  */
 export function ConceptRail() {
   const ref = useRef<HTMLElement>(null);
+
+  // Arrival: the stripe columns shoot up (in a scattered order, so the top edge
+  // is jagged until it fills) and the heading turns from ink to white as the
+  // stage completes. Scrubbed, so it runs backwards on the way up.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add(MQ.motion, () => {
+        const root = ref.current;
+        if (!root) return;
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: { trigger: root, start: "top 95%", end: "top top", scrub: 0.6 },
+        });
+        tl.fromTo(root.querySelectorAll("[data-curtain]"), { scaleY: 0 }, { scaleY: 1, duration: 0.7, ease: "power2.out", stagger: { each: 0.03, from: "random" } }, 0).fromTo(
+          root.querySelectorAll("[data-ink]"),
+          { color: "#1a1530" },
+          { color: "#ffffff", duration: 0.35 },
+          0.65,
+        );
+      });
+    },
+    { scope: ref },
+  );
 
   useGSAP(
     () => {
@@ -68,27 +95,34 @@ export function ConceptRail() {
 
   return (
     <section ref={ref} id="how-we-work" aria-labelledby="rail-title" className="relative bg-white">
-      <div data-pin className="flex flex-col justify-center overflow-hidden py-20 lg:h-svh lg:py-0">
-        <div className="mx-auto flex w-full max-w-[1440px] flex-wrap items-end justify-between gap-6 px-5 sm:px-8 lg:px-10">
+      {/* everything (cards included) is clipped to the dark stage's rounded rectangle */}
+      <div data-pin className="relative flex flex-col justify-center overflow-hidden py-20 [clip-path:inset(12px_round_30px)] lg:h-svh lg:py-0">
+        {/* Dark stage, built from stripe columns that shoot up as the section arrives */}
+        <div aria-hidden className="absolute inset-3 flex overflow-hidden rounded-[30px]">
+          {Array.from({ length: CURTAIN_BARS }).map((_, i) => (
+            <span key={i} data-curtain className="h-full flex-1 origin-bottom" style={{ background: CURTAIN_SHADES[i % CURTAIN_SHADES.length] }} />
+          ))}
+        </div>
+        <div className="relative mx-auto flex w-full max-w-[1440px] flex-wrap items-end justify-between gap-6 px-5 sm:px-8 lg:px-10">
           <div>
-            <h2 id="rail-title" className="max-w-[16ch] text-[clamp(2.25rem,4.4vw,4.25rem)] leading-[1.02] font-medium tracking-[-0.035em] text-[#1a1530]">
+            <h2 id="rail-title" data-ink className="max-w-[16ch] text-[clamp(2.25rem,4.4vw,4.25rem)] leading-[1.02] font-medium tracking-[-0.035em] text-white">
               Six steps. One partner. Every claim followed through.
             </h2>
           </div>
           <div className="hidden w-64 lg:block">
-            <p className="flex items-baseline justify-end gap-1 text-[#1a1530]">
+            <p data-ink className="flex items-baseline justify-end gap-1 text-white">
               <span data-counter className="text-5xl font-light tabular-nums">
                 01
               </span>
-              <span className="text-lg text-[#1a1530]/40">/ 0{CYCLE.length}</span>
+              <span className="text-lg opacity-40">/ 0{CYCLE.length}</span>
             </p>
-            <div className="mt-3 h-[3px] overflow-hidden rounded-full bg-[#1a1530]/10">
+            <div className="mt-3 h-[3px] overflow-hidden rounded-full bg-white/15">
               <div data-bar className="h-full origin-left rounded-full bg-[linear-gradient(90deg,#6f63e6,#5fa8f5,#d39be6)]" />
             </div>
           </div>
         </div>
 
-        <ol data-track className="mt-10 flex flex-col gap-4 px-5 sm:px-8 lg:mt-14 lg:flex-row lg:gap-5 lg:px-10 lg:will-change-transform">
+        <ol data-track className="relative mt-10 flex flex-col gap-4 px-5 sm:px-8 lg:mt-14 lg:flex-row lg:gap-5 lg:px-10 lg:will-change-transform">
           {CYCLE.map((s, i) => (
             <li
               key={s.key}

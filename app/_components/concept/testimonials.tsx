@@ -12,6 +12,12 @@ const REVIEWS = [
   { quote: TESTIMONIALS.more[1].quote, name: TESTIMONIALS.more[1].name, role: "", tone: "bg-[linear-gradient(165deg,#f4ddf3_0%,#e5b9ec_55%,#d39be6_100%)] text-[#1a1530]", size: "text-[clamp(1.6rem,2.6vw,2.4rem)]" },
 ];
 const LAND = [-4, 3, -1.5];
+/** Lilac, then sky, then the aqua that stays. */
+const RISE_LAYERS = [
+  "linear-gradient(180deg,#f3e2f8,#e6c9f0)",
+  "linear-gradient(180deg,#e2eefe,#c7ddfb)",
+  "linear-gradient(175deg,#eaf9fa 0%,#d3f1f4 55%,#bfe8ef 100%)",
+];
 
 /**
  * What agencies say. Desktop + motion: the section pins and the reviews are
@@ -20,6 +26,30 @@ const LAND = [-4, 3, -1.5];
  */
 export function ConceptTestimonials() {
   const ref = useRef<HTMLElement>(null);
+
+  // Arrival: each colour layer swells up from the bottom edge as a wide curve,
+  // the later ones chasing the earlier, until the aqua fills the stage.
+  // Scrubbed, so it drains back down on the way up.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add(MQ.motion, () => {
+        const root = ref.current;
+        if (!root) return;
+        gsap.fromTo(
+          root.querySelectorAll("[data-rise]"),
+          { clipPath: "ellipse(70% 0% at 50% 100%)" },
+          {
+            clipPath: "ellipse(140% 150% at 50% 100%)",
+            ease: "power1.inOut",
+            stagger: 0.18,
+            scrollTrigger: { trigger: root, start: "top 95%", end: "top top", scrub: 0.6 },
+          },
+        );
+      });
+    },
+    { scope: ref },
+  );
 
   useGSAP(
     () => {
@@ -48,7 +78,13 @@ export function ConceptTestimonials() {
   return (
     <section ref={ref} aria-labelledby="reviews-title" className="bg-white">
       <div data-stage className="relative overflow-hidden px-5 py-24 sm:px-8 lg:h-svh lg:px-10 lg:py-0">
-        <div className="mx-auto flex max-w-[1440px] items-start justify-between gap-6 lg:absolute lg:inset-x-0 lg:top-24 lg:px-10">
+        {/* Pale aqua stage: three colour layers rise from the bottom like liquid filling a glass */}
+        <div aria-hidden className="absolute inset-3 overflow-hidden rounded-[30px]">
+          {RISE_LAYERS.map((bg, i) => (
+            <div key={i} data-rise className="absolute inset-0" style={{ background: bg }} />
+          ))}
+        </div>
+        <div className="relative mx-auto flex max-w-[1440px] items-start justify-between gap-6 lg:absolute lg:inset-x-0 lg:top-24 lg:px-10">
           <div>
             <h2 id="reviews-title" className="max-w-[12ch] text-[clamp(2.2rem,4vw,3.75rem)] leading-[1.04] font-medium tracking-[-0.035em] text-[#1a1530]">
               Trusted by the agencies we serve.
