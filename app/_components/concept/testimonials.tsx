@@ -12,6 +12,9 @@ const REVIEWS = [
   { quote: TESTIMONIALS.more[1].quote, name: TESTIMONIALS.more[1].name, role: "", tone: "bg-[linear-gradient(165deg,#f4ddf3_0%,#e5b9ec_55%,#d39be6_100%)] text-[#1a1530]", size: "text-[clamp(1.6rem,2.6vw,2.4rem)]" },
 ];
 const LAND = [-4, 3, -1.5];
+/** Desktop: timeline units the rise takes before the first card, and the extra pin length (% of viewport) it adds. */
+const RISE_TIME = 1.7;
+const RISE_SCROLL = 140;
 /** Lilac, then sky, then the aqua that stays. */
 const RISE_LAYERS = [
   "linear-gradient(180deg,#f3e2f8,#e6c9f0)",
@@ -27,13 +30,14 @@ const RISE_LAYERS = [
 export function ConceptTestimonials() {
   const ref = useRef<HTMLElement>(null);
 
-  // Arrival: each colour layer swells up from the bottom edge as a wide curve,
-  // the later ones chasing the earlier, until the aqua fills the stage.
-  // Scrubbed, so it drains back down on the way up.
+  // Arrival on phones/tablets (no pin): each colour layer swells up from the
+  // bottom edge as a wide curve, the later ones chasing the earlier, spread over
+  // the section's whole approach. On desktop the same rise runs inside the pinned
+  // scene below, before the reviews are dealt. Scrubbed both ways.
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add(MQ.motion, () => {
+      mm.add(MQ.mobileMotion, () => {
         const root = ref.current;
         if (!root) return;
         gsap.fromTo(
@@ -43,7 +47,7 @@ export function ConceptTestimonials() {
             clipPath: "ellipse(140% 150% at 50% 100%)",
             ease: "power1.inOut",
             stagger: 0.18,
-            scrollTrigger: { trigger: root, start: "top 95%", end: "top top", scrub: 0.6 },
+            scrollTrigger: { trigger: root, start: "top bottom", end: "bottom 70%", scrub: 1 },
           },
         );
       });
@@ -60,14 +64,24 @@ export function ConceptTestimonials() {
         if (!root || !stage) return;
         const cards = gsap.utils.toArray<HTMLElement>("[data-deal]", root);
         gsap.set(cards, { position: "absolute", top: "60%", left: "50%", xPercent: -50, yPercent: -50 });
-        gsap.set(cards.slice(1), { y: () => window.innerHeight, rotate: 18 });
-        gsap.set(cards[0], { rotate: LAND[0] });
+        // explicit brightness: tweening `filter` from "none" starts at brightness(0) (a black card)
+        gsap.set(cards, { y: () => window.innerHeight, rotate: 18, filter: "brightness(1)" });
         const tl = gsap.timeline({
           defaults: { ease: "power3.out" },
-          scrollTrigger: { trigger: stage, start: "top top", end: `+=${cards.length * 80}%`, pin: true, scrub: 0.8, invalidateOnRefresh: true },
+          scrollTrigger: { trigger: stage, start: "top top", end: `+=${cards.length * 80 + RISE_SCROLL}%`, pin: true, scrub: 1, invalidateOnRefresh: true },
         });
-        cards.slice(1).forEach((card, i) => {
-          tl.to(card, { y: 0, rotate: LAND[i + 1], duration: 1 }, i * 1.1).to(cards.slice(0, i + 1), { scale: "-=0.05", filter: "brightness(0.9)", duration: 1 }, i * 1.1);
+        // 1. the stage holds while the colour rises slowly, wave chasing wave
+        tl.fromTo(
+          root.querySelectorAll("[data-rise]"),
+          { clipPath: "ellipse(70% 0% at 50% 100%)" },
+          { clipPath: "ellipse(140% 150% at 50% 100%)", duration: 1.1, stagger: 0.25, ease: "power1.inOut" },
+          0,
+        );
+        // 2. then the reviews are dealt onto it
+        cards.forEach((card, i) => {
+          const at = RISE_TIME + i * 1.1;
+          tl.to(card, { y: 0, rotate: LAND[i], duration: 1 }, at);
+          if (i > 0) tl.to(cards.slice(0, i), { scale: "-=0.05", filter: "brightness(0.9)", duration: 1 }, at);
         });
         tl.to({}, { duration: 0.4 });
       });
